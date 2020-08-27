@@ -1,7 +1,7 @@
 /*
 ===============================================================================
  Name        : main.c
- Author      : $(author)
+ Author      : Lauri.M Tuomas.A Taneli.T
  Version     :
  Copyright   : $(copyright)
  Description : main definition
@@ -48,22 +48,22 @@ void vConfigureTimerForRunTimeStats( void ) {
 /* end runtime statictics collection */
 
 /**
- * @brief	main routine for FreeRTOS blinky example
+ * @brief
  * @return	Nothing, function should not exit
  */
 
 #include <stdio.h>
 #include <ctype.h>
-int main(void) {
+#include "task.h"
+#include "tools/GetUartString.h"
 
-	prvSetupHardware();
-	int ch;
-	Board_UARTPutChar('T');
-	while(1){
-	  ch = Board_UARTGetChar();
-	  if(isalnum(ch))
-		  Board_UARTPutChar(ch);
-	}
+int main(void) {
 	//vTaskStartScheduler();
+	prvSetupHardware();
+	GetUartString Ustr('\n');
+	while(1){
+		Board_UARTPutSTR(Ustr.getUartMessage());
+		Board_UARTPutSTR("OK\r\n");
+	}
 	return 0 ;
 }
