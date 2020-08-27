@@ -1,5 +1,7 @@
 #include "Parser.h"
 #include "board.h"
+#include <cstring>
+#include <string>
 
 Parser::Parser() {
 }
@@ -7,12 +9,18 @@ Parser::Parser() {
 Parser::~Parser() {
 }
 
-/* M10
- G28
- G1
- M1
- M4
+/**
+ * @param *line the command string
+ * @return command
  */
+Parser::parse(const char* cmdLine)
+{
+	Command cmd;
+	cmd.type = getMovetype(cmdline);
+	cmd.parameters = getParams(cmdline);
+	return cmd;
+}
+
 
 /**
  * @param *line the command string
@@ -20,10 +28,6 @@ Parser::~Parser() {
  */
 CommandType_t Parser::getMovetype(const char *line) {
 	CommandType_t cmd = INVALID_COMMAND; // if matching command not found, stays as invalid command
-
-  //TODO: parse uart g-code
-
-
 
 	if (line[0] == 'G') { // looks for matching command
 		if (line[1] == '1')
@@ -35,7 +39,53 @@ CommandType_t Parser::getMovetype(const char *line) {
 			cmd = COMMAND_START;
 		else if (line[1] == '1')
 			cmd = COMMAND_PEN;
+		else if (line[1] == '4')
+			cmd = COMMAND_LASER;
 	}
 
 	return cmd;
+}
+
+/**
+ * @param *line the command string
+ * @return command type
+ */
+const char* Parser::getParams(const char* line, Command cmd)
+{
+	if (cmd.type == COMMAND_MOVE)
+	{
+		cmd.x = stoi(findValue("X", line));
+		cmd.y = stoi(findValue("Y", line));
+		cmd.absolute = findValue("A") == '1' ? true : false;
+	}
+	else if (cmd.type == COMMAND_ORIGIN)
+	{
+		//goto origin
+	}
+	else if (cmd.type == COMMAND_START)
+	{
+		//start
+	}
+	else if (cmd.type == COMMAND_PEN)
+	{
+		//get value
+	}
+}
+
+/**
+ * @param *line the command string
+ * @return parameter as string
+ */
+const char* Parser::findValue(const char key, const char* line)
+{
+	char* ret = NULL;
+	for(int i = 0; i < strlen(line); i++)
+	{
+		if(line[i] == key)
+		{
+			strcat(ret, line[i]);
+			if(line[i] == ' ' || line[i] == '\r'|| line[i] == '\n')
+				break;
+		}
+	}
 }
