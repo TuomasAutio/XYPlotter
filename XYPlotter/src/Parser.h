@@ -1,5 +1,5 @@
-
 #include <stdio.h>
+#include "singleton.h"
 
 enum CommandType_t
 {
@@ -13,7 +13,7 @@ enum CommandType_t
 };
 
 
-class Parser
+class Parser : public Singleton<Parser>
 {
 public:
 	Parser();
