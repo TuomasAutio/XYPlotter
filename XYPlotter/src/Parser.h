@@ -1,9 +1,7 @@
-#ifndef	PARSER_H_
-#define PARSER_H_
 
-#include <stdio>
+#include <stdio.h>
 
-enum CommandType_T
+enum CommandType_t
 {
 	COMMAND_START, //M10
 	COMMAND_ORIGIN, //G28 aka go to origin
@@ -11,6 +9,7 @@ enum CommandType_T
 	COMMAND_PEN, //M1 set pen pos
 	COMMAND_STOP, //M4 stop
 	COMMAND_QUERY,
+	INVALID_COMMAND,
 };
 
 
@@ -19,7 +18,7 @@ class Parser
 public:
 	Parser();
     ~Parser();
-    MoveType_t getMovetype(char*);
+    CommandType_t getMovetype(const char*);
 
 };
 

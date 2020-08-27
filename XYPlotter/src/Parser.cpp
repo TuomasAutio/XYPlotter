@@ -14,15 +14,18 @@ Parser::~Parser() {
  M4
  */
 
-auto testline = "G1 X-0.50 Y101.50 A0";
+/**
+ * @param *line the command string
+ * @return command type
+ */
+CommandType_t Parser::getMovetype(const char *line) {
+	CommandType_t cmd = INVALID_COMMAND; // if matching command not found, stays as invalid command
 
-MoveType_t Parser::getMovetype(char *line) {
-	MoveType_t cmd;
+  //TODO: parse uart g-code
 
 
 
-
-	if (line[0] == 'G') {
+	if (line[0] == 'G') { // looks for matching command
 		if (line[1] == '1')
 			cmd = COMMAND_MOVE;
 		else if (line[2] == '2' && line[3] == '8')

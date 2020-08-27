@@ -29,7 +29,7 @@
 							<tool id="com.crt.advproject.cpp.lib.debug.1881010404" name="MCU C++ Compiler" superClass="com.crt.advproject.cpp.lib.debug">
 								<option id="com.crt.advproject.cpp.hdrlib.2090075866" name="Library headers" superClass="com.crt.advproject.cpp.hdrlib" useByScannerDiscovery="false"/>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1952376941" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false"/>
-								<option id="com.crt.advproject.cpp.fpu.23410571" superClass="com.crt.advproject.cpp.fpu"/>
+								<option id="com.crt.advproject.cpp.fpu.23410571" superClass="com.crt.advproject.cpp.fpu" useByScannerDiscovery="true"/>
 							</tool>
 							<tool id="com.crt.advproject.gcc.lib.debug.1662481870" name="MCU C Compiler" superClass="com.crt.advproject.gcc.lib.debug">
 								<option id="com.crt.advproject.gcc.thumb.997187715" name="Thumb mode" superClass="com.crt.advproject.gcc.thumb" useByScannerDiscovery="false" value="true" valueType="boolean"/>
@@ -53,7 +53,7 @@
 								</option>
 								<option id="com.crt.advproject.gcc.hdrlib.1457796606" name="Library headers" superClass="com.crt.advproject.gcc.hdrlib" useByScannerDiscovery="false" value="com.crt.advproject.gcc.hdrlib.newlibnano" valueType="enumerated"/>
 								<option id="com.crt.advproject.gcc.specs.721621690" name="Specs" superClass="com.crt.advproject.gcc.specs" useByScannerDiscovery="false" value="com.crt.advproject.gcc.specs.newlibnano" valueType="enumerated"/>
-								<option id="com.crt.advproject.gcc.fpu.1411010738" superClass="com.crt.advproject.gcc.fpu"/>
+								<option id="com.crt.advproject.gcc.fpu.1411010738" superClass="com.crt.advproject.gcc.fpu" useByScannerDiscovery="true"/>
 								<inputType id="com.crt.advproject.compiler.input.113356932" superClass="com.crt.advproject.compiler.input"/>
 							</tool>
 							<tool id="com.crt.advproject.gas.lib.debug.1547026887" name="MCU Assembler" superClass="com.crt.advproject.gas.lib.debug">

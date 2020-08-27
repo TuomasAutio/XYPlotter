@@ -6,7 +6,7 @@
  Copyright   : $(copyright)
  Description : main definition
 ===============================================================================
-*/
+ */
 
 #if defined (__USE_LPCOPEN)
 #if defined(NO_BOARD_LIB)
@@ -52,11 +52,18 @@ void vConfigureTimerForRunTimeStats( void ) {
  * @return	Nothing, function should not exit
  */
 
+#include <stdio.h>
+#include <ctype.h>
 int main(void) {
 
-    prvSetupHardware();
-
-
-    vTaskStartScheduler();
-    return 0 ;
+	prvSetupHardware();
+	int ch;
+	Board_UARTPutChar('T');
+	while(1){
+	  ch = Board_UARTGetChar();
+	  if(isalnum(ch))
+		  Board_UARTPutChar(ch);
+	}
+	//vTaskStartScheduler();
+	return 0 ;
 }
