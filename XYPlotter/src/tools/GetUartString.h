@@ -13,6 +13,9 @@
 #include "board.h"
 #include "singleton.h"
 
+#include <stdio.h>
+#include <ctype.h>
+
 class GetUartString : public Singleton<GetUartString>{
 public:
 	GetUartString(char EndOFLineChar);

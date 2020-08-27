@@ -63,7 +63,7 @@ int main(void) {
 	GetUartString Ustr('\n');
 	while(1){
 		Board_UARTPutSTR(Ustr.getUartMessage());
-		Board_UARTPutSTR("OK\r\n");
+		//Board_UARTPutSTR("OK\r\n");
 	}
 	return 0 ;
 }

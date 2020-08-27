@@ -18,7 +18,10 @@ GetUartString::~GetUartString() {
 char* GetUartString::getUartMessage(){
 	int i = 0;
 	while (((ch = Board_UARTGetChar()) != endOfLineChar) && i < MaxMessageSize){
-			str[i++] = ch;
+		if(isalnum(ch) && iscntrl(ch)){
+			str[i] = ch;
+		}
+		++i;
 	}
 	if(i == 0) {
 		i = 0;// TODO: remove breakpoint debug
