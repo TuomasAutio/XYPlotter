@@ -1,8 +1,6 @@
 #include "Parser.h"
 #include "board.h"
-#include <cstring>
-#include <string>
-#if 0
+
 Parser::Parser() {
 }
 
@@ -17,80 +15,67 @@ const char* Parser::readFromfile(){
  * @param *line the command string
  * @return command
  */
-Command Parser::parse(const char* cmdLine)
-{
+
+
+Command Parser::parse(std::string cmdLine) {
 	Command cmd;
-	cmd.type = getMovetype(cmdLine);
-	cmd.parameters = getParams(cmdLine, cmd);
+	getMovetype(cmdline, &cmd);
+	getParams(cmdline, &cmd);
 	return cmd;
 }
 
-
 /**
- * @param *line the command string
- * @return command type
+ * @param *line the command string, &command
+ *
  */
-CommandType_t Parser::getMovetype(const char *line) {
+void Parser::getMovetype(std::string line, Command cmd) {
 	CommandType_t cmd = INVALID_COMMAND; // if matching command not found, stays as invalid command
-
-	if (line[0] == 'G') { // looks for matching command
-		if (line[1] == '1')
-			cmd = COMMAND_MOVE;
-		else if (line[2] == '2' && line[3] == '8')
-			cmd = COMMAND_ORIGIN;
-	} else if (line[0] == 'M') {
-		if (line[1] == '1' && line[2] == '0')
-			cmd = COMMAND_START;
-		else if (line[1] == '1')
-			cmd = COMMAND_PEN;
-		else if (line[1] == '4')
-			cmd = COMMAND_LASER;
-	}
-
+	if (line.find("G1 ") != string::npos)
+		cmd.type = COMMAND_MOVE;
+	if (line.find("G28 ") != string::npos)
+		cmd.type = COMMAND_ORIGIN;
+	if (line.find("M10 ") != string::npos)
+		cmd.type = COMMAND_START;
+	if (line.find("M1 ") != string::npos)
+		cmd.type = COMMAND_PEN;
+	if (line.find("M4 ") != string::npos)
+		cmd.type = COMMAND_LASER;
 	return cmd;
 }
 
 /**
  * @param *line the command string
- * @return command type
+ *
  */
-const char* Parser::getParams(const char* line, Command cmd)
-{
-	if (cmd.type == COMMAND_MOVE)
-	{
-		cmd.x = stoi(findValue("X", line));
-		cmd.y = stoi(findValue("Y", line));
-		cmd.absolute = findValue("A") == '1' ? true : false;
-	}
-	else if (cmd.type == COMMAND_ORIGIN)
-	{
+void Parser::getParams(std::string line, Command cmd) {
+	//find according params and cast to correct types
+	if (cmd.type == COMMAND_MOVE) {
+		cmd.x = stol(findValue("X", line));
+		cmd.y = stol(findValue("Y", line));
+		cmd.absolute = findValue("A") == "1" ? true : false;
+	} else if (cmd.type == COMMAND_ORIGIN) {
 		//goto origin
-	}
-	else if (cmd.type == COMMAND_START)
-	{
+	} else if (cmd.type == COMMAND_START) {
 		//start
-	}
-	else if (cmd.type == COMMAND_PEN)
-	{
-		//get value
+	} else if (cmd.type == COMMAND_PEN) {
+		cmd.penvalue = stoi(findValue("M4 ", line));
 	}
 }
 
 /**
- * @param *line the command string
+ * @param *line the command string, key to look for
  * @return parameter as string
  */
-const char* Parser::findValue(const char key, const char* line)
-{
-	char* ret = NULL;
-	for(int i = 0; i < strlen(line); i++)
-	{
-		if(line[i] == key)
-		{
-			strcat(ret, line[i]);
-			if(line[i] == ' ' || line[i] == '\r'|| line[i] == '\n')
-				break;
+std::string Parser::findValue(std::string key, std::string arg) {
+	//find key from argument and save key pos for copying
+	auto pos = arg.find(key) + 1;
+	string ret;
+	for (int i = pos; i < strlen(line); i++) {
+		//copy value and return it
+		ret.push_back(line[i]);
+		if (arg[i] == ' ' || arg[i] == '\r' || arg[i] == '\n') {
+			break;
 		}
 	}
+	return ret;
 }
-#endif
