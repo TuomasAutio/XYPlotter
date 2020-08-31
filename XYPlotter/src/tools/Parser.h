@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <iostream>
 #include <string>
+#include <cstring>
 #include "singleton.h"
 
 enum CommandType_t {
@@ -26,8 +26,10 @@ class Parser: public Singleton<Parser> {
 public:
 	Parser();
 	~Parser();
-	void getMovetype(std::string);
-	void getParams(std::string line, Command cmd);
-	std::string findValue(std::string key, std::string line);
+	const char* readFromfile();
+	Command parse(const char*);
+	void getMovetype(const char*, Command&);
+	void getParams(const char*, Command&);
+	const char* findValue(const char, const char*);
 };
 
