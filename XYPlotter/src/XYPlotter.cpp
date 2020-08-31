@@ -61,10 +61,12 @@ int main(void) {
 	//vTaskStartScheduler();
 	prvSetupHardware();
 
-
-
+	GetUartString URT('\n');
+	char buff[64];
 	while(1){
+		URT.getUartMessageFromFile(buff);
 
+		Board_UARTPutSTR(buff);
 	}
 	return 0 ;
 }

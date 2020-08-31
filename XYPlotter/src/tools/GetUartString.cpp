@@ -15,15 +15,43 @@ GetUartString::GetUartString(char EndOFLineChar): endOfLineChar(EndOFLineChar) {
 GetUartString::~GetUartString() {
 	// TODO Auto-generated destructor stub
 }
-std::string GetUartString::getUartMessage(){
-	std::string str;
+
+void GetUartString::getUartMessageFromFile(char * buff){
+	static int pos = 0;
+	int count = 0;
+
+	FILE *fp = fopen( "gcode01.txt", "r");
+	if (!fp){
+		fp = nullptr; // TODO: REMOVE DEBUG BREAKPOINT
+	}
+
+	while (fgets(buff, sizeof buff, fp) != NULL) /* read a line */
+	{
+		if (count == pos)
+		{
+			fclose(fp);
+
+			return;
+
+		}
+		else
+		{
+			count++;
+		}
+	};
+
+	fclose(fp);
+	return;
+}
+void GetUartString::getUartMessage(char * str){
+
 	char ch;
 	int i = 0;
-	while ((((ch = Board_UARTGetChar()) !='n' ) && str.back() != '\r') && i++ < MaxMessageSize ){
+	while ((((ch = Board_UARTGetChar()) !='n' ) && str[i] != '\r') && i < MaxMessageSize ){
 		if(isalnum(ch) || iscntrl(ch)){
-			str.push_back(ch);
+			str[i++] = ch;
 		}
 	}
-	str.pop_back();// removes carriage return
-	return str;
+	str[i-1] = '\0'; // removes carriage return & adds nullterminator
+	return;
 }

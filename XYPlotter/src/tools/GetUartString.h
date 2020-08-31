@@ -15,13 +15,14 @@
 
 #include <stdio.h>
 #include <ctype.h>
-#include <string>
+
 
 class GetUartString : public Singleton<GetUartString>{
 public:
 	GetUartString(char EndOFLineChar);
 	virtual ~GetUartString();
-	std::string getUartMessage();
+	void getUartMessage(char *);
+	void getUartMessageFromFile(char *);
 private:
 	char endOfLineChar;
 
