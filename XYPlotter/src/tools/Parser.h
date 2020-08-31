@@ -30,6 +30,8 @@ class Parser : public Singleton<Parser>
 public:
 	Parser();
     ~Parser();
+    Command parse(const char* cmdLine);
+    const char* readFromfile();
     CommandType_t getMovetype(const char*);
     const char* getParams(const char* line, Command cmd);
     const char* findValue(const char key, const char* line);

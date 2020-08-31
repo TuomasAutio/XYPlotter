@@ -60,10 +60,11 @@ void vConfigureTimerForRunTimeStats( void ) {
 int main(void) {
 	//vTaskStartScheduler();
 	prvSetupHardware();
-	GetUartString Ustr('\n');
+
+
+
 	while(1){
-		Board_UARTPutSTR(Ustr.getUartMessage());
-		//Board_UARTPutSTR("OK\r\n");
+
 	}
 	return 0 ;
 }

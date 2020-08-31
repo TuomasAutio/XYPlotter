@@ -15,16 +15,15 @@ GetUartString::GetUartString(char EndOFLineChar): endOfLineChar(EndOFLineChar) {
 GetUartString::~GetUartString() {
 	// TODO Auto-generated destructor stub
 }
-char* GetUartString::getUartMessage(){
+std::string GetUartString::getUartMessage(){
+	std::string str;
+	char ch;
 	int i = 0;
-	while (((ch = Board_UARTGetChar()) != endOfLineChar) && i < MaxMessageSize){
-		if(isalnum(ch) && iscntrl(ch)){
-			str[i] = ch;
+	while ((((ch = Board_UARTGetChar()) !='n' ) && str.back() != '\r') && i++ < MaxMessageSize ){
+		if(isalnum(ch) || iscntrl(ch)){
+			str.push_back(ch);
 		}
-		++i;
 	}
-	if(i == 0) {
-		i = 0;// TODO: remove breakpoint debug
-	}
+	str.pop_back();// removes carriage return
 	return str;
 }

@@ -2,22 +2,26 @@
 #include "board.h"
 #include <cstring>
 #include <string>
-
+#if 0
 Parser::Parser() {
 }
 
 Parser::~Parser() {
 }
 
+const char* Parser::readFromfile(){
+
+}
+
 /**
  * @param *line the command string
  * @return command
  */
-Parser::parse(const char* cmdLine)
+Command Parser::parse(const char* cmdLine)
 {
 	Command cmd;
-	cmd.type = getMovetype(cmdline);
-	cmd.parameters = getParams(cmdline);
+	cmd.type = getMovetype(cmdLine);
+	cmd.parameters = getParams(cmdLine, cmd);
 	return cmd;
 }
 
@@ -89,3 +93,4 @@ const char* Parser::findValue(const char key, const char* line)
 		}
 	}
 }
+#endif
