@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <string>
+#include <fstream>
+#include <sstream>
 #include <cstring>
 #include "singleton.h"
+
 
 enum CommandType_t {
 	INVALID_COMMAND, //NULL
@@ -15,18 +18,18 @@ enum CommandType_t {
 };
 
 struct Command {
-	CommandType_t type;
-	int x;
-	int y;
-	bool absolute;
-	int penvalue;
+	CommandType_t type = INVALID_COMMAND;
+	float x = 0;
+	float y = 0;
+	bool absolute = NULL;
+	int penvalue = 0;
 };
 
-class Parser: public Singleton<Parser> {
+class Parser : public Singleton<Parser> {
 public:
 	Parser();
 	~Parser();
-	const char* readFromfile();
+	void readFromfile(const char*);
 	Command parse(const char*);
 	void getMovetype(const char*, Command&);
 	void getParams(const char*, Command&);

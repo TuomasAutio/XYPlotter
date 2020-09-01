@@ -1,5 +1,4 @@
-#include "Parser.h"
-#include "board.h"
+#include "parser.h"
 
 Parser::Parser() {
 }
@@ -7,9 +6,23 @@ Parser::Parser() {
 Parser::~Parser() {
 }
 
-const char* Parser::readFromfile(){
+void Parser::readFromfile(const char* filename) {
 
+	auto infile = fopen(filename, "r");
+	if (infile)
+	{
+		char cmdLine[255];
+		while (fgets(cmdLine, 255, infile))
+		{
+			strtok(cmdLine, "\n");
+			auto cmd = parse(cmdLine);
+			printf("\nx:%f\ny:%f\nType:%d\nabsolute:%d\nPenvalue:%d\n", cmd.x, cmd.y, cmd.type, cmd.absolute, cmd.penvalue); //send command somewhere
+		}
+	}
+	else
+		printf("File could not be opened");
 }
+
 
 /**
  * @param *line the command string
@@ -50,12 +63,16 @@ void Parser::getParams(const char* line, Command& cmd) {
 		cmd.x = std::stof(findValue('X', line));
 		cmd.y = std::stof(findValue('Y', line));
 		cmd.absolute = std::stoi(findValue('A', line)) == 1 ? true : false;
-	} else if (cmd.type == COMMAND_ORIGIN) {
+	}
+	else if (cmd.type == COMMAND_ORIGIN) {
 		//goto origin
-	} else if (cmd.type == COMMAND_START) {
+	}
+	else if (cmd.type == COMMAND_START) {
 		//start
-	} else if (cmd.type == COMMAND_LASER) {
-		//pen values
+	}
+	else if (cmd.type == COMMAND_LASER) {
+		strtok((char*)line, " ");
+		cmd.penvalue = std::stoi(strtok(NULL, " "));
 	}
 }
 
@@ -65,7 +82,6 @@ void Parser::getParams(const char* line, Command& cmd) {
  */
 const char* Parser::findValue(const char key, const char* cmdline) {
 	int pos = -1;
-
 	for (size_t i = 0; i < strlen(cmdline); i++)
 		if (cmdline[i] == key)
 			pos = i;
