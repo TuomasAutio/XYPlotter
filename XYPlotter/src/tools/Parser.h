@@ -1,3 +1,6 @@
+#ifndef TOOLS_PARSER_H_
+#define TOOLS_PARSER_H_
+
 #include <stdio.h>
 #include <string>
 #include <fstream>
@@ -6,14 +9,18 @@
 #include "singleton.h"
 
 
+
+
+
+
 enum CommandType_t {
 	INVALID_COMMAND, //NULL
 	COMMAND_ORIGIN, //G28 aka go to origin
+	COMMAND_START, //M10
 	COMMAND_MOVE, //G1 go to position
 	COMMAND_PEN, //M1 set pen pos
 	COMMAND_LASER, //M4 stop
-	COMMAND_START, //M10
-	COMMAND_READY, //M 11
+	COMMAND_SET_DIR_AND_AREA_SPEED, //M 5
 
 };
 
@@ -29,10 +36,10 @@ class Parser : public Singleton<Parser> {
 public:
 	Parser();
 	~Parser();
-	void readFromfile(const char*);
 	Command parse(const char*);
 	void getMovetype(const char*, Command&);
 	void getParams(const char*, Command&);
 	const char* findValue(const char, const char*);
 };
 
+#endif

@@ -6,23 +6,6 @@ Parser::Parser() {
 Parser::~Parser() {
 }
 
-void Parser::readFromfile(const char* filename) {
-
-	auto infile = fopen(filename, "r");
-	if (infile)
-	{
-		char cmdLine[255];
-		while (fgets(cmdLine, 255, infile))
-		{
-			strtok(cmdLine, "\n");
-			auto cmd = parse(cmdLine);
-			printf("\nx:%f\ny:%f\nType:%d\nabsolute:%d\nPenvalue:%d\n", cmd.x, cmd.y, cmd.type, cmd.absolute, cmd.penvalue); //send command somewhere
-		}
-	}
-	else
-		printf("File could not be opened");
-}
-
 
 /**
  * @param *line the command string
@@ -41,15 +24,15 @@ Command Parser::parse(const char* cmdLine) {
  */
 void Parser::getMovetype(const char* line, Command& cmd) {
 	cmd.type = INVALID_COMMAND; // if matching command not found, stays as invalid command
-	if (strstr(line, "G1 "))
+	if (strstr(line, "G1 ") != nullptr)
 		cmd.type = COMMAND_MOVE;
-	if (strstr(line, "G28  "))
+	else if (strstr(line, "G28 ")!= nullptr)
 		cmd.type = COMMAND_ORIGIN;
-	if (strstr(line, "M10 "))
+	else if (strstr(line, "M10 ")!= nullptr)
 		cmd.type = COMMAND_START;
-	if (strstr(line, "M1  "))
+	else if (strstr(line, "M1 ")!= nullptr)
 		cmd.type = COMMAND_PEN;
-	if (strstr(line, "M4 "))
+	else if (strstr(line, "M4 ")!= nullptr)
 		cmd.type = COMMAND_LASER;
 }
 
