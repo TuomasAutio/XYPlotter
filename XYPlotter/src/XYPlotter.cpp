@@ -1,12 +1,12 @@
 /*
 ===============================================================================
  Name        : main.c
- Author      : $(author)
+ Author      : Lauri.M Tuomas.A Taneli.T
  Version     :
  Copyright   : $(copyright)
  Description : main definition
 ===============================================================================
-*/
+ */
 
 #if defined (__USE_LPCOPEN)
 #if defined(NO_BOARD_LIB)
@@ -48,15 +48,25 @@ void vConfigureTimerForRunTimeStats( void ) {
 /* end runtime statictics collection */
 
 /**
- * @brief	main routine for FreeRTOS blinky example
+ * @brief
  * @return	Nothing, function should not exit
  */
 
+#include <stdio.h>
+#include <ctype.h>
+#include "task.h"
+#include "tools/GetUartString.h"
+
 int main(void) {
+	//vTaskStartScheduler();
+	prvSetupHardware();
 
-    prvSetupHardware();
+	GetUartString URT('\n');
+	char buff[64];
+	while(1){
+		URT.getUartMessageFromFile(buff);
 
-
-    vTaskStartScheduler();
-    return 0 ;
+		Board_UARTPutSTR(buff);
+	}
+	return 0 ;
 }
