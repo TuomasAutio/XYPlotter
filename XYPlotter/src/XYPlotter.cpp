@@ -55,13 +55,13 @@ void vConfigureTimerForRunTimeStats( void ) {
 #include <stdio.h>
 #include <ctype.h>
 #include "task.h"
-#include "tools/GetUartString.h"
+#include "tools/UartController.h"
 
 int main(void) {
 	//vTaskStartScheduler();
 	prvSetupHardware();
 
-	GetUartString URT('\n');
+	UartController URT('\n');
 	char buff[64];
 	while(1){
 		URT.getUartMessageFromFile(buff);
