@@ -56,15 +56,23 @@ void vConfigureTimerForRunTimeStats( void ) {
 #include <ctype.h>
 #include "task.h"
 #include "tools/UartController.h"
+#include "tools/Parser.h"
+#include "tools/Assingments/PlottingSimulator.h"
 
 int main(void) {
 	//vTaskStartScheduler();
 	prvSetupHardware();
 
 	UartController URT('\n');
-	char buff[64];
+	Parser p;
+	PlottingSimulator ps;
+	char buff[128];
+	char response[128];
 	while(1){
-		URT.getUartMessageFromFile(buff);
+
+		URT.getUartMessage(buff);
+		ps.responseForMdraw(response, p.parse(buff));
+		URT.SendUartMessage(response);
 
 		Board_UARTPutSTR(buff);
 	}
