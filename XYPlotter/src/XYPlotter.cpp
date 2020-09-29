@@ -20,6 +20,13 @@
 
 #include "FreeRTOS.h"
 
+#include <stdio.h>
+#include <ctype.h>
+#include "task.h"
+#include "tools/UartController.h"
+#include "tools/Parser.h"
+#include "StepperController.h"
+
 static void prvSetupHardware(void)
 {
 	SystemCoreClockUpdate();
@@ -47,34 +54,44 @@ void vConfigureTimerForRunTimeStats( void ) {
 }
 /* end runtime statictics collection */
 
+
+
+static void stepperTask(void *pvParameters) {
+	StepperController stepper;
+
+
+	while (1) {
+		stepper.move(50, 50);
+		vTaskDelay(100);
+
+		stepper.move(80, -50);
+		vTaskDelay(100);
+
+		stepper.move(-50, -100);
+		vTaskDelay(100);
+
+		stepper.move(-90, 100);
+		vTaskDelay(100);
+	}
+}
 /**
  * @brief
  * @return	Nothing, function should not exit
  */
 
-#include <stdio.h>
-#include <ctype.h>
-#include "task.h"
-#include "tools/UartController.h"
-#include "tools/Parser.h"
-#include "tools/Assingments/PlottingSimulator.h"
 
 int main(void) {
-	//vTaskStartScheduler();
+
 	prvSetupHardware();
 
-	UartController URT('\n');
-	Parser p;
-	PlottingSimulator ps;
-	char buff[128];
-	char response[128];
-	while(1){
+	xTaskCreate(stepperTask, "stepperTask",
+			configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
+			(TaskHandle_t *) NULL);
 
-		URT.getUartMessage(buff);
-		ps.responseForMdraw(response, p.parse(buff));
-		URT.SendUartMessage(response);
 
-		Board_UARTPutSTR(buff);
-	}
+	vTaskStartScheduler();
+	/* Should never arrive here */
+
+
 	return 0 ;
 }
