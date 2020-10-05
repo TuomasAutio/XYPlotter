@@ -56,22 +56,71 @@ void vConfigureTimerForRunTimeStats( void ) {
 
 
 
+
 static void stepperTask(void *pvParameters) {
 	StepperController stepper;
+	int motordelay = 10;
+	int moveSize = 100;
 
+	srand(2);
 
 	while (1) {
-		stepper.move(50, 50);
-		vTaskDelay(100);
+		 /*
+		// random
+		stepper.move((rand() % 100)- 50, (rand() % 100)- 50);
+		vTaskDelay(motordelay);
 
-		stepper.move(80, -50);
-		vTaskDelay(100);
 
-		stepper.move(-50, -100);
-		vTaskDelay(100);
 
-		stepper.move(-90, 100);
-		vTaskDelay(100);
+		// circle
+		for(int i = -50; i < 50; i++){
+			stepper.move(i, 50);
+			vTaskDelay(motordelay);
+		}
+
+		for (int j = 50; j > -50; j--){
+			stepper.move(50, j);
+			vTaskDelay(motordelay);
+		}
+
+		for(int i = 50; i > -50; i--){
+			stepper.move(i, -50);
+			vTaskDelay(motordelay);
+		}
+
+		for (int j = -50; j < 50; j++){
+			stepper.move(-50, j);
+			vTaskDelay(motordelay);
+		}
+		*/
+
+		//  octagon
+		stepper.move(moveSize, 0); // East
+		vTaskDelay(motordelay);
+
+		stepper.move(moveSize, -moveSize); // SouthEast
+		vTaskDelay(motordelay);
+
+		stepper.move(0, -moveSize); // South
+		vTaskDelay(motordelay);
+
+		stepper.move(-moveSize, -moveSize); // SouthWest
+		vTaskDelay(motordelay);
+
+		stepper.move(-moveSize, 0); // West
+		vTaskDelay(motordelay);
+
+		stepper.move(-moveSize, moveSize); // NorthWest
+		vTaskDelay(motordelay);
+
+		stepper.move(0, moveSize); // North
+		vTaskDelay(motordelay);
+
+		stepper.move(moveSize, moveSize); // NorthEeast
+		vTaskDelay(motordelay);
+
+
+
 	}
 }
 /**
@@ -92,6 +141,7 @@ int main(void) {
 	vTaskStartScheduler();
 	/* Should never arrive here */
 
+	while(1);
 
 	return 0 ;
 }
