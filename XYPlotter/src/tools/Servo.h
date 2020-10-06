@@ -7,15 +7,20 @@
 
 #ifndef TOOLS_SERVO_H_
 #define TOOLS_SERVO_H_
-
+#include "chip.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 class Servo {
 public:
 	Servo(int port, int pin);
-	void move(double value);
+	void Draw();
+	void Stop();
 private:
 	int port;
 	int pin;
+
+	int servoPos;
 };
 
 

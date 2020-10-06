@@ -1,6 +1,9 @@
 #include "Servo.h"
 #include "chip.h"
 
+#define PENUP 1640
+#define PENDOWN 1365
+
 Servo::Servo(int port, int pin)
 {
 		Chip_SCT_Init(LPC_SCT0);
@@ -22,16 +25,36 @@ Servo::Servo(int port, int pin)
 		LPC_SCT0->OUT[0].CLR = (1 << 1);// Event 1 will clear SCTx_OUT0
 
 		LPC_SCT0->CTRL_L &= ~(1 << 2);// Unhalt by clearing bit 2 of CTRL req
+
+		servoPos = PENUP;
+		LPC_SCT0->MATCHREL[1].L = PENUP;
 }
 
-void Servo::move(double value)
-{
-	if(value == 160)
-	{
-		LPC_SCT0->MATCHREL[1].L = 1000; //Stop draw
-	}else if (value == 90) {
-		LPC_SCT0->MATCHREL[1].L = 1500; //draw
-	} else {
-		//Should not happen
+void Servo::Stop() {
+	while(LPC_SCT0->MATCHREL[1].L <= PENUP) {
+		LPC_SCT0->MATCHREL[1].L  = ++servoPos; // need to decrement by 1 for rservo to lower smoothly and that task is not complete without pen beign down
+		vTaskDelay(1);
 	}
 }
+
+void Servo::Draw() {
+	while(LPC_SCT0->MATCHREL[1].L >= PENDOWN) {
+		LPC_SCT0->MATCHREL[1].L  = --servoPos;
+		vTaskDelay(1);
+	}
+}
+/*
+void Servo::penDown() {
+	while(LPC_SCTLARGE0->MATCHREL[1].L <= penDown_cycle_length) {
+		++LPC_SCTLARGE0->MATCHREL[1].L;
+		vTaskDelay(1);
+	}
+}
+
+void Servo::penUp() {
+	while(LPC_SCTLARGE0->MATCHREL[1].L >= penUp_cycle_length) {
+		--LPC_SCTLARGE0->MATCHREL[1].L;
+		vTaskDelay(1);
+	}
+}
+*/

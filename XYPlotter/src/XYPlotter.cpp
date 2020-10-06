@@ -19,10 +19,9 @@
 #include <cr_section_macros.h>
 #include <stdio.h>
 #include <ctype.h>
-#include "task.h"
-#include "tools/GetUartString.h"
 #include "FreeRTOS.h"
-#include "tools/Parser.h"
+#include "task.h"
+#include "tools/Servo.h"
 #include "tools/UartController.h"
 #include "tools/Parser.h"
 #include "StepperController.h"
@@ -32,13 +31,16 @@ static void prvSetupHardware(void)
 {
 	SystemCoreClockUpdate();
 	Board_Init();
+	//disable laser
+	//DigitalIoPin laser(0, 12, DigitalIoPin::output, false);
+	//laser.write(false);
 
 	/* Initial LED0 state is off */
 	Board_LED_Set(0, false);
 }
 
 Parser parse;
-GetUartString uartReader('\n');
+UartController uartReader('\n');
 
 /*****************************************************************************
  * Public functions
@@ -56,14 +58,37 @@ void vConfigureTimerForRunTimeStats(void) {
 }
 /* end runtime statictics collection */
 
+static void servoTask(void * pvParameters){
 
+	Servo pen(0, 10);
+
+
+	DigitalIoPin sw1(0,8,DigitalIoPin::pullup);
+	DigitalIoPin sw2(1,6,DigitalIoPin::pullup);
+	DigitalIoPin sw3(1,8,DigitalIoPin::pullup);
+
+	while(1){
+
+		if(sw1.read()){
+			pen.Draw();
+		}else if(sw3.read()){
+			pen.Stop();
+		}
+
+		vTaskDelay(100);
+
+	}
+}
 
 static void stepperTask(void *pvParameters) {
 	StepperController stepper;
+	Servo pen(0, 10);
 	int motordelay = 10;
 	int moveSize = 50;
 
 	srand(2);
+	pen.Draw();
+	vTaskDelay(500);
 
 	while (1) {
 #if 0
@@ -123,7 +148,10 @@ static void stepperTask(void *pvParameters) {
 		moveSize-=5;
 
 		if (moveSize == -55){
-			while(1);
+			while(1){
+				pen.Stop();
+				vTaskDelay(10000);
+			}
 		}
 
 #endif
@@ -186,11 +214,17 @@ void worker() {
 
 
 int main(void) {
-ö	prvSetupHardware();
+	prvSetupHardware();
+
 
 	xTaskCreate(stepperTask, "stepperTask",
 			configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
 			(TaskHandle_t *) NULL);
+	/*
+	 xTaskCreate(servoTask, "stepperTask",
+			configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
+			(TaskHandle_t *) NULL);
+			*/
 
 
 	vTaskStartScheduler();
