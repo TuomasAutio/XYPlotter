@@ -48,3 +48,6 @@ void UartController::getUartMessage(char * str){
 	str[i-1] = '\0'; // removes carriage return & adds nullterminator
 	return;
 }
+void UartController::SendUartMessage(char * message){
+	DEBUGOUT(message);
+}

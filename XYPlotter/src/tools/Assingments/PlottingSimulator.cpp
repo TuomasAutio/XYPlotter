@@ -44,7 +44,7 @@ void PlottingSimulator::responseForMdraw(char * str, Command cmd){
 		break;
 	case INVALID_COMMAND:
 	default:
-		while(1); // breakpoint error
+		Board_LED_Set(0, true);
 		break;
 	}
 }
