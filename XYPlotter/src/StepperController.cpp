@@ -195,7 +195,7 @@ int StepperController::move(signed int xSteps,signed int ySteps){
 	}
 
 
-	MRT_start(xSteps*2, ySteps*2); // increment by 2 for iopin->flip functionality
+	MRT_start(xSteps*2, ySteps*2); // increment by 2 for iopin->flip() functionality
 
 	return 1; // ph
 }

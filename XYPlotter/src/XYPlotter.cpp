@@ -137,7 +137,7 @@ static void stepperTask(void *pvParameters) {
 
 int main(void) {
 
-	prvSetupHardware();
+ö	prvSetupHardware();
 
 	xTaskCreate(stepperTask, "stepperTask",
 			configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
