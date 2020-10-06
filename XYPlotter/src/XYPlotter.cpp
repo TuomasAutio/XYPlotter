@@ -60,40 +60,41 @@ void vConfigureTimerForRunTimeStats( void ) {
 static void stepperTask(void *pvParameters) {
 	StepperController stepper;
 	int motordelay = 10;
-	int moveSize = 100;
+	int moveSize = 50;
 
 	srand(2);
 
 	while (1) {
-		 /*
+#if 0
 		// random
 		stepper.move((rand() % 100)- 50, (rand() % 100)- 50);
 		vTaskDelay(motordelay);
 
+#elif 0
 
-
-		// circle
-		for(int i = -50; i < 50; i++){
-			stepper.move(i, 50);
+		// circular shape , set canvas size to max and quarter step
+		for(int i = -10; i < 10; i++){
+			stepper.move(i, 10);
 			vTaskDelay(motordelay);
 		}
 
-		for (int j = 50; j > -50; j--){
-			stepper.move(50, j);
+		for (int j = 10; j > -10; j--){
+			stepper.move(10, j);
 			vTaskDelay(motordelay);
 		}
 
-		for(int i = 50; i > -50; i--){
-			stepper.move(i, -50);
+		for(int i = 10; i > -10; i--){
+			stepper.move(i, -10);
 			vTaskDelay(motordelay);
 		}
 
-		for (int j = -50; j < 50; j++){
-			stepper.move(-50, j);
+		for (int j = -10; j < 10; j++){
+			stepper.move(-10, j);
 			vTaskDelay(motordelay);
 		}
-		*/
 
+
+#else
 		//  octagon
 		stepper.move(moveSize, 0); // East
 		vTaskDelay(motordelay);
@@ -118,8 +119,13 @@ static void stepperTask(void *pvParameters) {
 
 		stepper.move(moveSize, moveSize); // NorthEeast
 		vTaskDelay(motordelay);
+		moveSize-=5;
 
+		if (moveSize == -55){
+			while(1);
+		}
 
+#endif
 
 	}
 }

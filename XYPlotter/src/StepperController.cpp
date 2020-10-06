@@ -29,20 +29,18 @@ void MRT_IRQHandler(void)
 	Chip_MRT_ClearIntPending(int_pend);
 
 	if(MRT_count > 0) {
-		--MRT_count;
 
 		/* Channel 0 */
 		if (int_pend & MRTn_INTFLAG(0)) {
+			--MRT_count;
 			xMotor->flip();
-
 		}
-
 		/* Channel 1 */
 		if (int_pend & MRTn_INTFLAG(1)) {
+			--MRT_count;
 			yMotor->flip();
 
 		}
-
 
 	} else {
 		// disable timers
@@ -83,20 +81,19 @@ static void setupMRT(uint8_t ch, MRT_MODE_T mode, uint32_t rate)
 	Chip_MRT_SetEnabled(pMRT);
 }
 
-void MRT_start(int xCount, int yCount, int us) {
+void MRT_start(int xCount, int yCount) {
 	//uint64_t cmp_value;
 	// Determine approximate compare value based on clock rate and passed interval
 	//cmp_value = (uint64_t) Chip_Clock_GetSystemClockRate() * (uint64_t) us / 1000000;
-
 
 
 	for (int mrtch = 0; mrtch < MRT_CHANNELS_NUM; mrtch++) {
 		Chip_MRT_SetDisabled(Chip_MRT_GetRegPtr(mrtch));
 	}
 
-	MRT_count = ((xCount > yCount) ? xCount : yCount); // check witch one is the higest, the lower one will havee its tickrate adjusted.
+	//MRT_count = ((xCount > yCount) ? xCount : yCount); // check witch one is the higest, the lower one will havee its tickrate adjusted.
 
-
+	MRT_count = xCount + yCount;
 
 	NVIC_EnableIRQ(MRT_IRQn);
 
@@ -106,8 +103,8 @@ void MRT_start(int xCount, int yCount, int us) {
 		assert(xCount != 0);
 		float ratio =  (float)yCount/(float)xCount;
 
-		setupMRT(0, MRT_MODE_REPEAT, 2000);/* n Hz rate */
-		setupMRT(1, MRT_MODE_REPEAT, 2000*ratio);/* n * ratio Hz rate */
+		setupMRT(0, MRT_MODE_REPEAT, 1000);/* n Hz rate */
+		setupMRT(1, MRT_MODE_REPEAT, 1000*ratio);/* n * ratio Hz rate */
 
 
 	}else {
@@ -198,7 +195,7 @@ int StepperController::move(signed int xSteps,signed int ySteps){
 	}
 
 
-	MRT_start(xSteps, ySteps, 1000000 / (800)); // ph
+	MRT_start(xSteps*2, ySteps*2); // increment by 2 for iopin->flip functionality
 
 	return 1; // ph
 }
