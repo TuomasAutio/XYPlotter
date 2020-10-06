@@ -67,7 +67,7 @@ void calibrate() {
 }
 
 void worker() {
-	char *str;
+	char str[64];
 	float lastX;
 	float lastY;
 
