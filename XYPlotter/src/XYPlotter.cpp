@@ -23,9 +23,13 @@
 #include "tools/GetUartString.h"
 #include "FreeRTOS.h"
 #include "tools/Parser.h"
+#include "tools/UartController.h"
+#include "tools/Parser.h"
+#include "StepperController.h"
 
 
-static void prvSetupHardware(void) {
+static void prvSetupHardware(void)
+{
 	SystemCoreClockUpdate();
 	Board_Init();
 
@@ -51,6 +55,86 @@ void vConfigureTimerForRunTimeStats(void) {
 
 }
 /* end runtime statictics collection */
+
+
+
+static void stepperTask(void *pvParameters) {
+	StepperController stepper;
+	int motordelay = 10;
+	int moveSize = 50;
+
+	srand(2);
+
+	while (1) {
+#if 0
+		// random
+		stepper.move((rand() % 100)- 50, (rand() % 100)- 50);
+		vTaskDelay(motordelay);
+
+#elif 0
+
+		// circular shape , set canvas size to max and quarter step
+		for(int i = -10; i < 10; i++){
+			stepper.move(i, 10);
+			vTaskDelay(motordelay);
+		}
+
+		for (int j = 10; j > -10; j--){
+			stepper.move(10, j);
+			vTaskDelay(motordelay);
+		}
+
+		for(int i = 10; i > -10; i--){
+			stepper.move(i, -10);
+			vTaskDelay(motordelay);
+		}
+
+		for (int j = -10; j < 10; j++){
+			stepper.move(-10, j);
+			vTaskDelay(motordelay);
+		}
+
+
+#else
+		//  octagon
+		stepper.move(moveSize, 0); // East
+		vTaskDelay(motordelay);
+
+		stepper.move(moveSize, -moveSize); // SouthEast
+		vTaskDelay(motordelay);
+
+		stepper.move(0, -moveSize); // South
+		vTaskDelay(motordelay);
+
+		stepper.move(-moveSize, -moveSize); // SouthWest
+		vTaskDelay(motordelay);
+
+		stepper.move(-moveSize, 0); // West
+		vTaskDelay(motordelay);
+
+		stepper.move(-moveSize, moveSize); // NorthWest
+		vTaskDelay(motordelay);
+
+		stepper.move(0, moveSize); // North
+		vTaskDelay(motordelay);
+
+		stepper.move(moveSize, moveSize); // NorthEeast
+		vTaskDelay(motordelay);
+		moveSize-=5;
+
+		if (moveSize == -55){
+			while(1);
+		}
+
+#endif
+
+	}
+}
+/**
+ * @brief
+ * @return	Nothing, function should not exit
+ */
+
 
 void bresenham(float x0, float y0, float x1, float y1) {
 	auto dx = x1-x0;
@@ -100,16 +184,20 @@ void worker() {
 	}
 }
 
+
 int main(void) {
-	//vTaskStartScheduler();
-	prvSetupHardware();
+ö	prvSetupHardware();
 
-	GetUartString URT('\n');
-	char buff[64];
-	while (1) {
-		URT.getUartMessageFromFile(buff);
+	xTaskCreate(stepperTask, "stepperTask",
+			configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
+			(TaskHandle_t *) NULL);
 
-		Board_UARTPutSTR(buff);
-	}
-	return 0;
+
+	vTaskStartScheduler();
+	/* Should never arrive here */
+
+	while(1);
+
+	return 0 ;
+
 }
