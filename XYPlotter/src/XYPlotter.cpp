@@ -19,22 +19,28 @@
 #include <cr_section_macros.h>
 #include <stdio.h>
 #include <ctype.h>
-#include "task.h"
-#include "tools/GetUartString.h"
 #include "FreeRTOS.h"
+#include "task.h"
+#include "tools/Servo.h"
+#include "tools/UartController.h"
 #include "tools/Parser.h"
+#include "StepperController.h"
 
 
-static void prvSetupHardware(void) {
+static void prvSetupHardware(void)
+{
 	SystemCoreClockUpdate();
 	Board_Init();
+	//disable laser
+	//DigitalIoPin laser(0, 12, DigitalIoPin::output, false);
+	//laser.write(false);
 
 	/* Initial LED0 state is off */
 	Board_LED_Set(0, false);
 }
 
 Parser parse;
-GetUartString uartReader('\n');
+UartController uartReader('\n');
 
 /*****************************************************************************
  * Public functions
@@ -51,6 +57,112 @@ void vConfigureTimerForRunTimeStats(void) {
 
 }
 /* end runtime statictics collection */
+
+static void servoTask(void * pvParameters){
+
+	Servo pen(0, 10);
+
+
+	DigitalIoPin sw1(0,8,DigitalIoPin::pullup);
+	DigitalIoPin sw2(1,6,DigitalIoPin::pullup);
+	DigitalIoPin sw3(1,8,DigitalIoPin::pullup);
+
+	while(1){
+
+		if(sw1.read()){
+			pen.Draw();
+		}else if(sw3.read()){
+			pen.Stop();
+		}
+
+		vTaskDelay(100);
+
+	}
+}
+
+static void stepperTask(void *pvParameters) {
+	StepperController stepper;
+	Servo pen(0, 10);
+	int motordelay = 10;
+	int moveSize = 50;
+
+	srand(2);
+	pen.Draw();
+	vTaskDelay(500);
+
+	while (1) {
+#if 0
+		// random
+		stepper.move((rand() % 100)- 50, (rand() % 100)- 50);
+		vTaskDelay(motordelay);
+
+#elif 0
+
+		// circular shape , set canvas size to max and quarter step
+		for(int i = -10; i < 10; i++){
+			stepper.move(i, 10);
+			vTaskDelay(motordelay);
+		}
+
+		for (int j = 10; j > -10; j--){
+			stepper.move(10, j);
+			vTaskDelay(motordelay);
+		}
+
+		for(int i = 10; i > -10; i--){
+			stepper.move(i, -10);
+			vTaskDelay(motordelay);
+		}
+
+		for (int j = -10; j < 10; j++){
+			stepper.move(-10, j);
+			vTaskDelay(motordelay);
+		}
+
+
+#else
+		//  octagon
+		stepper.move(moveSize, 0); // East
+		vTaskDelay(motordelay);
+
+		stepper.move(moveSize, -moveSize); // SouthEast
+		vTaskDelay(motordelay);
+
+		stepper.move(0, -moveSize); // South
+		vTaskDelay(motordelay);
+
+		stepper.move(-moveSize, -moveSize); // SouthWest
+		vTaskDelay(motordelay);
+
+		stepper.move(-moveSize, 0); // West
+		vTaskDelay(motordelay);
+
+		stepper.move(-moveSize, moveSize); // NorthWest
+		vTaskDelay(motordelay);
+
+		stepper.move(0, moveSize); // North
+		vTaskDelay(motordelay);
+
+		stepper.move(moveSize, moveSize); // NorthEeast
+		vTaskDelay(motordelay);
+		moveSize-=5;
+
+		if (moveSize == -55){
+			while(1){
+				pen.Stop();
+				vTaskDelay(10000);
+			}
+		}
+
+#endif
+
+	}
+}
+/**
+ * @brief
+ * @return	Nothing, function should not exit
+ */
+
 
 void bresenham(float x0, float y0, float x1, float y1) {
 	auto dx = x1-x0;
@@ -100,16 +212,26 @@ void worker() {
 	}
 }
 
+
 int main(void) {
-	//vTaskStartScheduler();
 	prvSetupHardware();
 
-	GetUartString URT('\n');
-	char buff[64];
-	while (1) {
-		URT.getUartMessageFromFile(buff);
 
-		Board_UARTPutSTR(buff);
-	}
-	return 0;
+	xTaskCreate(stepperTask, "stepperTask",
+			configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
+			(TaskHandle_t *) NULL);
+	/*
+	 xTaskCreate(servoTask, "stepperTask",
+			configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
+			(TaskHandle_t *) NULL);
+			*/
+
+
+	vTaskStartScheduler();
+	/* Should never arrive here */
+
+	while(1);
+
+	return 0 ;
+
 }

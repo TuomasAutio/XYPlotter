@@ -1,0 +1,221 @@
+[FreeRTOS/src/event_groups.c:521]: (style) The scope of the variable 'pxListItem' can be reduced.
+[FreeRTOS/src/portable/GCC/ARM_CM3/port.c:204]: (style) Condition 'ulDummy==0' is always true
+[FreeRTOS/src/portable/GCC/ARM_CM3/port.c:633]: (information) Skipping configuration 'configSYSTICK_CLOCK_HZ' since the value of 'configSYSTICK_CLOCK_HZ' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[FreeRTOS/src/portable/GCC/ARM_CM3/port.c:183]: (information) Skipping configuration 'configTASK_RETURN_ADDRESS' since the value of 'configTASK_RETURN_ADDRESS' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[FreeRTOS/src/tasks.c:2667]: (style) The scope of the variable 'pxTCB' can be reduced.
+[FreeRTOS/src/tasks.c:3882]: (style) The scope of the variable 'pxTCB' can be reduced.
+[XYPlotter/src/StepperController.cpp:168]: (error) Memory pointed to by 'limSW1' is freed twice.
+[XYPlotter/src/StepperController.cpp:169]: (error) Memory pointed to by 'limSW1' is freed twice.
+[XYPlotter/src/StepperController.cpp:170]: (error) Memory pointed to by 'limSW1' is freed twice.
+[XYPlotter/src/tools/UartController.h:24]: (style) Class 'UartController' has a constructor with 1 argument that is not explicit.
+[XYPlotter/src/XYPlotter.cpp:168]: (error) Uninitialized variable: x0
+[XYPlotter/src/XYPlotter.cpp:169]: (error) Uninitialized variable: y0
+[XYPlotter/src/XYPlotter.cpp:192]: (error) Uninitialized variable: lastX
+[XYPlotter/src/XYPlotter.cpp:192]: (error) Uninitialized variable: lastY
+[XYPlotter/src/cr_startup_lpc15xx.cpp:384]: (style) The scope of the variable 'LoadAddr' can be reduced.
+[XYPlotter/src/tools/DigitalIoPin.h:19] -> [XYPlotter/src/tools/DigitalIoPin.cpp:12]: (style, inconclusive) Function 'DigitalIoPin' argument 1 names different: declaration 'port' definition 'port_'.
+[XYPlotter/src/tools/DigitalIoPin.h:19] -> [XYPlotter/src/tools/DigitalIoPin.cpp:12]: (style, inconclusive) Function 'DigitalIoPin' argument 2 names different: declaration 'pin' definition 'pin_'.
+[XYPlotter/src/tools/LimitedInt.cpp:63] -> [XYPlotter/src/tools/LimitedInt.h:23]: (style, inconclusive) Technically the member function 'LimitedInt::operator==' can be const.
+[XYPlotter/src/tools/Servo.cpp:7]: (warning) Member variable 'Servo::port' is not initialized in the constructor.
+[XYPlotter/src/tools/Servo.cpp:7]: (warning) Member variable 'Servo::pin' is not initialized in the constructor.
+[XYPlotter/src/tools/UartController.cpp:39] -> [XYPlotter/src/tools/UartController.h:26]: (performance, inconclusive) Technically the member function 'UartController::getUartMessage' can be static (but you may consider moving to unnamed namespace).
+[XYPlotter/src/tools/UartController.cpp:51] -> [XYPlotter/src/tools/UartController.h:27]: (performance, inconclusive) Technically the member function 'UartController::SendUartMessage' can be static (but you may consider moving to unnamed namespace).
+[XYPlotter/src/tools/UartController.cpp:19] -> [XYPlotter/src/tools/UartController.h:28]: (performance, inconclusive) Technically the member function 'UartController::getUartMessageFromFile' can be static (but you may consider moving to unnamed namespace).
+[lpc_board_nxp_lpcxpresso_1549/src/board.c:0]: (information) Too many #ifdef configurations - cppcheck only checks 12 of 15 configurations. Use --force to check all configurations.
+[lpc_board_nxp_lpcxpresso_1549/src/board.c:59]: (information) Skipping configuration 'DEBUG_UART' since the value of 'DEBUG_UART' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[lpc_board_nxp_lpcxpresso_1549/src/board.c:69]: (information) Skipping configuration 'DEBUG_UART' since the value of 'DEBUG_UART' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[lpc_board_nxp_lpcxpresso_1549/src/board.c:102]: (information) Skipping configuration 'DEBUG_UART' since the value of 'DEBUG_UART' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[lpc_board_nxp_lpcxpresso_1549/src/board.c:103]: (information) Skipping configuration 'DEBUG_UART' since the value of 'DEBUG_UART' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[lpc_board_nxp_lpcxpresso_1549/src/board.c:104]: (information) Skipping configuration 'DEBUG_UART' since the value of 'DEBUG_UART' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[lpc_board_nxp_lpcxpresso_1549/src/board.c:105]: (information) Skipping configuration 'DEBUG_UART' since the value of 'DEBUG_UART' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[lpc_board_nxp_lpcxpresso_1549/src/board.c:106]: (information) Skipping configuration 'DEBUG_UART' since the value of 'DEBUG_UART' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[lpc_chip_15xx/src/clock_15xx.c:330]: (style) The scope of the variable 'mult' can be reduced.
+[lpc_chip_15xx/src/i2cs_15xx.c:56]: (style) The scope of the variable 'state' can be reduced.
+[lpc_chip_15xx/src/ring_buffer.c:101]: (style) Assignment of function parameter has no effect outside the function.
+[lpc_chip_15xx/src/ring_buffer.c:153]: (style) Assignment of function parameter has no effect outside the function.
+[lpc_chip_15xx/src/spi_15xx.c:182]: (style) The scope of the variable 'Status' can be reduced.
+[lpc_chip_15xx/src/uart_15xx.c:111]: (style) The scope of the variable 'pass' can be reduced.
+[lpc_chip_15xx/src/uart_15xx.c:144]: (style) The scope of the variable 'pass' can be reduced.
+[lpc_board_nxp_lpcxpresso_1549/src/board.c:87]: (style) The function 'Board_Debug_Init' is never used.
+[lpc_board_nxp_lpcxpresso_1549/src/board.c:175]: (style) The function 'Board_Joystick_Init' is never used.
+[lpc_board_nxp_lpcxpresso_1549/src/board.c:136]: (style) The function 'Board_LED_Test' is never used.
+[lpc_board_nxp_lpcxpresso_1549/src/board.c:148]: (style) The function 'Board_LED_Toggle' is never used.
+[lpc_board_nxp_lpcxpresso_1549/src/board.c:77]: (style) The function 'Board_UARTPutSTR' is never used.
+[lpc_chip_15xx/src/acmp_15xx.c:57]: (style) The function 'Chip_ACMP_Deinit' is never used.
+[lpc_chip_15xx/src/acmp_15xx.c:48]: (style) The function 'Chip_ACMP_Init' is never used.
+[lpc_chip_15xx/src/acmp_15xx.c:94]: (style) The function 'Chip_ACMP_SetHysteresis' is never used.
+[lpc_chip_15xx/src/acmp_15xx.c:65]: (style) The function 'Chip_ACMP_SetIntEdgeSelection' is never used.
+[lpc_chip_15xx/src/acmp_15xx.c:84]: (style) The function 'Chip_ACMP_SetNegVoltRef' is never used.
+[lpc_chip_15xx/src/acmp_15xx.c:74]: (style) The function 'Chip_ACMP_SetPosVoltRef' is never used.
+[lpc_chip_15xx/src/acmp_15xx.c:114]: (style) The function 'Chip_ACMP_SetupACMPInt' is never used.
+[lpc_chip_15xx/src/acmp_15xx.c:103]: (style) The function 'Chip_ACMP_SetupACMPRefs' is never used.
+[lpc_chip_15xx/src/acmp_15xx.c:136]: (style) The function 'Chip_ACMP_SetupVoltLadder' is never used.
+[lpc_chip_15xx/src/adc_15xx.c:184]: (style) The function 'Chip_ADC_ClearSequencerBits' is never used.
+[lpc_chip_15xx/src/adc_15xx.c:121]: (style) The function 'Chip_ADC_DeInit' is never used.
+[lpc_chip_15xx/src/adc_15xx.c:202]: (style) The function 'Chip_ADC_DisableInt' is never used.
+[lpc_chip_15xx/src/adc_15xx.c:196]: (style) The function 'Chip_ADC_EnableInt' is never used.
+[lpc_chip_15xx/src/adc_15xx.c:99]: (style) The function 'Chip_ADC_Init' is never used.
+[lpc_chip_15xx/src/adc_15xx.c:220]: (style) The function 'Chip_ADC_SelectTH0Channels' is never used.
+[lpc_chip_15xx/src/adc_15xx.c:226]: (style) The function 'Chip_ADC_SelectTH1Channels' is never used.
+[lpc_chip_15xx/src/adc_15xx.c:172]: (style) The function 'Chip_ADC_SetSequencerBits' is never used.
+[lpc_chip_15xx/src/adc_15xx.c:208]: (style) The function 'Chip_ADC_SetThresholdInt' is never used.
+[lpc_chip_15xx/src/adc_15xx.c:154]: (style) The function 'Chip_ADC_StartCalibration' is never used.
+[lpc_chip_15xx/src/crc_15xx.c:95]: (style) The function 'Chip_CRC_CRC16' is never used.
+[lpc_chip_15xx/src/crc_15xx.c:108]: (style) The function 'Chip_CRC_CRC32' is never used.
+[lpc_chip_15xx/src/crc_15xx.c:82]: (style) The function 'Chip_CRC_CRC8' is never used.
+[lpc_chip_15xx/src/crc_15xx.c:57]: (style) The function 'Chip_CRC_Deinit' is never used.
+[lpc_chip_15xx/src/crc_15xx.c:50]: (style) The function 'Chip_CRC_Init' is never used.
+[lpc_chip_15xx/src/crc_15xx.c:63]: (style) The function 'Chip_CRC_UseDefaultConfig' is never used.
+[lpc_chip_15xx/src/clock_15xx.c:221]: (style) The function 'Chip_Clock_GetADCASYNCRate' is never used.
+[lpc_chip_15xx/src/clock_15xx.c:184]: (style) The function 'Chip_Clock_GetMainClockSource' is never used.
+[lpc_chip_15xx/src/clock_15xx.c:301]: (style) The function 'Chip_Clock_GetSysTickClockRate' is never used.
+[lpc_chip_15xx/src/clock_15xx.c:256]: (style) The function 'Chip_Clock_SetCLKOUTSource' is never used.
+[lpc_chip_15xx/src/clock_15xx.c:384]: (style) The function 'Chip_Clock_SetPLLBypass' is never used.
+[lpc_chip_15xx/src/clock_15xx.c:349]: (style) The function 'Chip_Clock_SetUARTBaseClockRate' is never used.
+[lpc_chip_15xx/src/dac_15xx.c:58]: (style) The function 'Chip_DAC_DeInit' is never used.
+[lpc_chip_15xx/src/dac_15xx.c:51]: (style) The function 'Chip_DAC_Init' is never used.
+[lpc_chip_15xx/src/dma_15xx.c:95]: (style) The function 'Chip_DMA_SetupChannelTransferSize' is never used.
+[lpc_chip_15xx/src/dma_15xx.c:102]: (style) The function 'Chip_DMA_SetupTranChannel' is never used.
+[lpc_chip_15xx/src/eeprom.c:67]: (style) The function 'Chip_EEPROM_Read' is never used.
+[lpc_chip_15xx/src/eeprom.c:52]: (style) The function 'Chip_EEPROM_Write' is never used.
+[lpc_chip_15xx/src/gpio_15xx.c:62]: (style) The function 'Chip_GPIO_DeInit' is never used.
+[lpc_chip_15xx/src/gpio_15xx.c:82]: (style) The function 'Chip_GPIO_SetDir' is never used.
+[lpc_chip_15xx/src/gpio_15xx.c:93]: (style) The function 'Chip_GPIO_SetPinDIR' is never used.
+[lpc_chip_15xx/src/gpio_15xx.c:104]: (style) The function 'Chip_GPIO_SetPortDIR' is never used.
+[lpc_chip_15xx/src/gpio_15xx.c:71]: (style) The function 'Chip_GPIO_WriteDirBit' is never used.
+[lpc_chip_15xx/src/i2cm_15xx.c:51]: (style) The function 'Chip_I2CM_SetBusSpeed' is never used.
+[lpc_chip_15xx/src/i2cm_15xx.c:165]: (style) The function 'Chip_I2CM_XferBlocking' is never used.
+[lpc_chip_15xx/src/i2cs_15xx.c:51]: (style) The function 'Chip_I2CS_XferHandler' is never used.
+[lpc_chip_15xx/src/i2c_common_15xx.c:61]: (style) The function 'Chip_I2C_DeInit' is never used.
+[lpc_chip_15xx/src/i2c_common_15xx.c:51]: (style) The function 'Chip_I2C_Init' is never used.
+[lpc_chip_15xx/src/iap.c:93]: (style) The function 'Chip_IAP_BlankCheckSector' is never used.
+[lpc_chip_15xx/src/iap.c:128]: (style) The function 'Chip_IAP_Compare' is never used.
+[lpc_chip_15xx/src/iap.c:64]: (style) The function 'Chip_IAP_CopyRamToFlash' is never used.
+[lpc_chip_15xx/src/iap.c:168]: (style) The function 'Chip_IAP_ErasePage' is never used.
+[lpc_chip_15xx/src/iap.c:79]: (style) The function 'Chip_IAP_EraseSector' is never used.
+[lpc_chip_15xx/src/iap.c:51]: (style) The function 'Chip_IAP_PreSectorForReadWrite' is never used.
+[lpc_chip_15xx/src/iap.c:117]: (style) The function 'Chip_IAP_ReadBootCode' is never used.
+[lpc_chip_15xx/src/iap.c:106]: (style) The function 'Chip_IAP_ReadPID' is never used.
+[lpc_chip_15xx/src/iap.c:153]: (style) The function 'Chip_IAP_ReadUID' is never used.
+[lpc_chip_15xx/src/iap.c:142]: (style) The function 'Chip_IAP_ReinvokeISP' is never used.
+[lpc_chip_15xx/src/pmu_15xx.c:88]: (style) The function 'Chip_PMU_Sleep' is never used.
+[lpc_chip_15xx/src/ritimer_15xx.c:75]: (style) The function 'Chip_RIT_ClearCTRL' is never used.
+[lpc_chip_15xx/src/ritimer_15xx.c:59]: (style) The function 'Chip_RIT_DeInit' is never used.
+[lpc_chip_15xx/src/ritimer_15xx.c:91]: (style) The function 'Chip_RIT_GetCompareValue' is never used.
+[lpc_chip_15xx/src/ritimer_15xx.c:110]: (style) The function 'Chip_RIT_GetMaskValue' is never used.
+[lpc_chip_15xx/src/ritimer_15xx.c:66]: (style) The function 'Chip_RIT_SetCTRL' is never used.
+[lpc_chip_15xx/src/ritimer_15xx.c:122]: (style) The function 'Chip_RIT_SetCounter' is never used.
+[lpc_chip_15xx/src/ritimer_15xx.c:103]: (style) The function 'Chip_RIT_SetMaskValue' is never used.
+[lpc_chip_15xx/src/ritimer_15xx.c:141]: (style) The function 'Chip_RIT_SetTimerIntervalHz' is never used.
+[lpc_chip_15xx/src/sctipu_15xx.c:49]: (style) The function 'Chip_SCTIPU_ConfigSample' is never used.
+[lpc_chip_15xx/src/sct_pwm_15xx.c:51]: (style) The function 'Chip_SCTPWM_SetOutPin' is never used.
+[lpc_chip_15xx/src/sct_pwm_15xx.c:67]: (style) The function 'Chip_SCTPWM_SetRate' is never used.
+[lpc_chip_15xx/src/sct_15xx.c:60]: (style) The function 'Chip_SCT_DeInit' is never used.
+[lpc_chip_15xx/src/sct_15xx.c:68]: (style) The function 'Chip_SCT_SetClrControl' is never used.
+[lpc_chip_15xx/src/sct_15xx.c:79]: (style) The function 'Chip_SCT_SetConflictResolution' is never used.
+[lpc_chip_15xx/src/spi_15xx.c:95]: (style) The function 'Chip_SPI_CalClkRateDivider' is never used.
+[lpc_chip_15xx/src/spi_15xx.c:150]: (style) The function 'Chip_SPI_DeInit' is never used.
+[lpc_chip_15xx/src/spi_15xx.c:158]: (style) The function 'Chip_SPI_DelayConfig' is never used.
+[lpc_chip_15xx/src/spi_15xx.c:137]: (style) The function 'Chip_SPI_Init' is never used.
+[lpc_chip_15xx/src/spi_15xx.c:169]: (style) The function 'Chip_SPI_Int_Cmd' is never used.
+[lpc_chip_15xx/src/spi_15xx.c:268]: (style) The function 'Chip_SPI_Int_RWFrames' is never used.
+[lpc_chip_15xx/src/spi_15xx.c:180]: (style) The function 'Chip_SPI_RWFrames_Blocking' is never used.
+[lpc_chip_15xx/src/spi_15xx.c:239]: (style) The function 'Chip_SPI_ReadFrames_Blocking' is never used.
+[lpc_chip_15xx/src/spi_15xx.c:109]: (style) The function 'Chip_SPI_SetConfig' is never used.
+[lpc_chip_15xx/src/spi_15xx.c:211]: (style) The function 'Chip_SPI_WriteFrames_Blocking' is never used.
+[lpc_chip_15xx/src/swm_15xx.c:88]: (style) The function 'Chip_SWM_FixedPinEnable' is never used.
+[lpc_chip_15xx/src/swm_15xx.c:99]: (style) The function 'Chip_SWM_IsFixedPinEnabled' is never used.
+[lpc_chip_15xx/src/swm_15xx.c:54]: (style) The function 'Chip_SWM_MovablePinAssign' is never used.
+[lpc_chip_15xx/src/sysctl_15xx.c:73]: (style) The function 'Chip_SYSCTL_AssertPeriphReset' is never used.
+[lpc_chip_15xx/src/sysctl_15xx.c:84]: (style) The function 'Chip_SYSCTL_DeassertPeriphReset' is never used.
+[lpc_chip_15xx/src/sysctl_15xx.c:56]: (style) The function 'Chip_SYSCTL_GetCompFreqMeas' is never used.
+[lpc_chip_15xx/src/sysctl_15xx.c:95]: (style) The function 'Chip_SYSCTL_SetWakeup' is never used.
+[lpc_chip_15xx/src/uart_15xx.c:85]: (style) The function 'Chip_UART_DeInit' is never used.
+[lpc_chip_15xx/src/uart_15xx.c:227]: (style) The function 'Chip_UART_IRQRBHandler' is never used.
+[lpc_chip_15xx/src/uart_15xx.c:64]: (style) The function 'Chip_UART_Init' is never used.
+[lpc_chip_15xx/src/uart_15xx.c:142]: (style) The function 'Chip_UART_ReadBlocking' is never used.
+[lpc_chip_15xx/src/uart_15xx.c:219]: (style) The function 'Chip_UART_ReadRB' is never used.
+[lpc_chip_15xx/src/uart_15xx.c:109]: (style) The function 'Chip_UART_SendBlocking' is never used.
+[lpc_chip_15xx/src/uart_15xx.c:197]: (style) The function 'Chip_UART_SendRB' is never used.
+[lpc_chip_15xx/src/uart_15xx.c:158]: (style) The function 'Chip_UART_SetBaud' is never used.
+[lpc_chip_15xx/src/uart_15xx.c:166]: (style) The function 'Chip_UART_SetBaudWithRTC32K' is never used.
+[lpc_chip_15xx/src/chip_15xx.c:61]: (style) The function 'Chip_USB_Init' is never used.
+[lpc_chip_15xx/src/wwdt_15xx.c:63]: (style) The function 'Chip_WWDT_ClearStatusFlag' is never used.
+[lpc_chip_15xx/src/wwdt_15xx.c:51]: (style) The function 'Chip_WWDT_Init' is never used.
+[FreeRTOS/src/FreeRTOSCommonHooks.c:60]: (style) The function 'FreeRTOSDelay' is never used.
+[XYPlotter/src/cr_startup_lpc15xx.cpp:496]: (style) The function 'IntDefaultHandler' is never used.
+[lpc_board_nxp_lpcxpresso_1549/src/board.c:187]: (style) The function 'Joystick_GetStatus' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:321]: (style) The function 'MPU_pcTaskGetName' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:626]: (style) The function 'MPU_uxQueueMessagesWaiting' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:637]: (style) The function 'MPU_uxQueueSpacesAvailable' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:310]: (style) The function 'MPU_uxTaskGetNumberOfTasks' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:1165]: (style) The function 'MPU_vEventGroupDelete' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:863]: (style) The function 'MPU_vQueueDelete' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:1210]: (style) The function 'MPU_vStreamBufferDelete' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:141]: (style) The function 'MPU_vTaskAllocateMPURegions' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:506]: (style) The function 'MPU_vTaskSetTimeOutState' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:279]: (style) The function 'MPU_vTaskSuspendAll' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:1129]: (style) The function 'MPU_xEventGroupClearBits' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:1141]: (style) The function 'MPU_xEventGroupSetBits' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:1153]: (style) The function 'MPU_xEventGroupSync' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:1117]: (style) The function 'MPU_xEventGroupWaitBits' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:604]: (style) The function 'MPU_xQueueGenericReset' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:615]: (style) The function 'MPU_xQueueGenericSend' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:659]: (style) The function 'MPU_xQueuePeek' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:648]: (style) The function 'MPU_xQueueReceive' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:670]: (style) The function 'MPU_xQueueSemaphoreTake' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:1267]: (style) The function 'MPU_xStreamBufferBytesAvailable' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:1231]: (style) The function 'MPU_xStreamBufferIsEmpty' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:1219]: (style) The function 'MPU_xStreamBufferIsFull' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:1186]: (style) The function 'MPU_xStreamBufferNextMessageLengthBytes' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:1198]: (style) The function 'MPU_xStreamBufferReceive' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:1243]: (style) The function 'MPU_xStreamBufferReset' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:1174]: (style) The function 'MPU_xStreamBufferSend' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:1279]: (style) The function 'MPU_xStreamBufferSetTriggerLevel' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:1255]: (style) The function 'MPU_xStreamBufferSpacesAvailable' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:515]: (style) The function 'MPU_xTaskCheckForTimeOut' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:299]: (style) The function 'MPU_xTaskGetTickCount' is never used.
+[FreeRTOS/src/portable/Common/mpu_wrappers.c:288]: (style) The function 'MPU_xTaskResumeAll' is never used.
+[lpc_chip_15xx/src/ring_buffer.c:55]: (style) The function 'RingBuffer_Init' is never used.
+[XYPlotter/src/tools/UartController.cpp:51]: (style) The function 'SendUartMessage' is never used.
+[lpc_chip_15xx/src/stopwatch_15xx.c:57]: (style) The function 'StopWatch_Init' is never used.
+[lpc_chip_15xx/src/stopwatch_15xx.c:97]: (style) The function 'StopWatch_MsToTicks' is never used.
+[lpc_chip_15xx/src/stopwatch_15xx.c:72]: (style) The function 'StopWatch_Start' is never used.
+[lpc_chip_15xx/src/stopwatch_15xx.c:79]: (style) The function 'StopWatch_TicksPerSecond' is never used.
+[lpc_chip_15xx/src/stopwatch_15xx.c:85]: (style) The function 'StopWatch_TicksToMs' is never used.
+[lpc_chip_15xx/src/stopwatch_15xx.c:91]: (style) The function 'StopWatch_TicksToUs' is never used.
+[lpc_chip_15xx/src/stopwatch_15xx.c:103]: (style) The function 'StopWatch_UsToTicks' is never used.
+[XYPlotter/src/cr_cpp_config.cpp:58]: (style) The function '__aeabi_atexit' is never used.
+[FreeRTOS/src/FreeRTOSCommonHooks.c:106]: (style) The function '__user_heap_extend' is never used.
+[XYPlotter/src/cr_cpp_config.cpp:86]: (style) The function '__verbose_terminate_handler' is never used.
+[XYPlotter/src/tools/Assingments/PlottingSimulator.cpp:20]: (style) The function 'clamp' is never used.
+[XYPlotter/src/tools/UartController.cpp:19]: (style) The function 'getUartMessageFromFile' is never used.
+[FreeRTOS/src/tasks.c:1072]: (style) The function 'prvAddNewTaskToReadyList' is never used.
+[FreeRTOS/src/queue.c:429]: (style) The function 'prvInitialiseNewQueue' is never used.
+[FreeRTOS/src/tasks.c:821]: (style) The function 'prvInitialiseNewTask' is never used.
+[XYPlotter/src/tools/Assingments/PlottingSimulator.cpp:29]: (style) The function 'responseForMdraw' is never used.
+[XYPlotter/src/XYPlotter.cpp:61]: (style) The function 'servoTask' is never used.
+[FreeRTOS/src/queue.c:1959]: (style) The function 'uxQueueMessagesWaitingFromISR' is never used.
+[FreeRTOS/src/FreeRTOSCommonHooks.c:77]: (style) The function 'vApplicationIdleHook' is never used.
+[FreeRTOS/src/FreeRTOSCommonHooks.c:69]: (style) The function 'vApplicationMallocFailedHook' is never used.
+[FreeRTOS/src/FreeRTOSCommonHooks.c:84]: (style) The function 'vApplicationStackOverflowHook' is never used.
+[FreeRTOS/src/FreeRTOSCommonHooks.c:98]: (style) The function 'vApplicationTickHook' is never used.
+[XYPlotter/src/XYPlotter.cpp:52]: (style) The function 'vConfigureTimerForRunTimeStats' is never used.
+[FreeRTOS/src/event_groups.c:665]: (style) The function 'vEventGroupClearBitsCallback' is never used.
+[FreeRTOS/src/event_groups.c:657]: (style) The function 'vEventGroupSetBitsCallback' is never used.
+[FreeRTOS/src/portable/GCC/ARM_CM3/port.c:361]: (style) The function 'vPortEnterCritical' is never used.
+[FreeRTOS/src/portable/GCC/ARM_CM3/port.c:378]: (style) The function 'vPortExitCritical' is never used.
+[FreeRTOS/src/portable/GCC/ARM_CM3/port.c:217]: (style) The function 'vPortSVCHandler' is never used.
+[FreeRTOS/src/tasks.c:2089]: (style) The function 'vTaskEndScheduler' is never used.
+[XYPlotter/src/XYPlotter.cpp:181]: (style) The function 'worker' is never used.
+[FreeRTOS/src/event_groups.c:503]: (style) The function 'xEventGroupGetBitsFromISR' is never used.
+[FreeRTOS/src/portable/GCC/ARM_CM3/port.c:389]: (style) The function 'xPortPendSVHandler' is never used.
+[FreeRTOS/src/portable/GCC/ARM_CM3/port.c:426]: (style) The function 'xPortSysTickHandler' is never used.
+[FreeRTOS/src/queue.c:957]: (style) The function 'xQueueGenericSendFromISR' is never used.
+[FreeRTOS/src/queue.c:1108]: (style) The function 'xQueueGiveFromISR' is never used.
+[FreeRTOS/src/queue.c:2308]: (style) The function 'xQueueIsQueueEmptyFromISR' is never used.
+[FreeRTOS/src/queue.c:2348]: (style) The function 'xQueueIsQueueFullFromISR' is never used.
+[FreeRTOS/src/queue.c:1872]: (style) The function 'xQueuePeekFromISR' is never used.
+[FreeRTOS/src/queue.c:1781]: (style) The function 'xQueueReceiveFromISR' is never used.
+[FreeRTOS/src/tasks.c:2299]: (style) The function 'xTaskGetTickCountFromISR' is never used.
+(information) Cppcheck cannot find all the include files (use --check-config for details)

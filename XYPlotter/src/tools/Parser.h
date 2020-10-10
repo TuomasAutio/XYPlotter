@@ -21,6 +21,7 @@ enum CommandType_t {
 	COMMAND_PEN, //M1 set pen pos
 	COMMAND_LASER, //M4 stop
 	COMMAND_SET_DIR_AND_AREA_SPEED, //M 5
+	COMMAND_READY // ??????
 
 };
 
