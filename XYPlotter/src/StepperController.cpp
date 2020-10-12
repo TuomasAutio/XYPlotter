@@ -212,14 +212,14 @@ void StepperController::calibrate(){
 		switch(calibState)
 		{
 			case toOrigin:
-				if (!limSW1->read() && !limSW2->read()) //move x until hit limit switch
+				while (limSW2->read()) //move x until hit limit switch
 					move(dir,0);
-				if (!limSW3->read() && !limSW4->read()) //move y until hit limit switch
+				while (limSW4->read()) //move y until hit limit switch
 					move(0,dir);
 				totalStepX = 0;
 				totalStepY = 0;
 				calibState = xAxis;
-				dir *= 1;
+				dir *= -1;
 				break;
 			case xAxis:									// xAxis calibration
 				while (times < 2) // do 2 runs
