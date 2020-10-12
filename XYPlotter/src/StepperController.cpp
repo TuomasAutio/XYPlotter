@@ -33,13 +33,11 @@ void MRT_IRQHandler(void)
 		/* Channel 0 */
 		if (int_pend & MRTn_INTFLAG(0)) {
 			--MRT_count;
-			totalStepsX++;
 			xMotor->flip();
 		}
 		/* Channel 1 */
 		if (int_pend & MRTn_INTFLAG(1)) {
 			--MRT_count;
-			totalStepsY++;
 			yMotor->flip();
 
 		}
@@ -206,11 +204,12 @@ void StepperController::calibrate(){
 	bool calibrated = false;
 	int dir = 1;
 	int times = 0;
+	int calibState = toOrigin;
 
 	while (!calibrated)
 	{
 
-		switch(calibState < toOrigin)
+		switch(calibState)
 		{
 			case toOrigin:
 				if (!limSW1->read() && !limSW2->read()) //move x until hit limit switch
@@ -226,7 +225,7 @@ void StepperController::calibrate(){
 				while (times < 2) // do 2 runs
 				{
 					move(dir, 0);
-
+					totalStepX++;
 					if (!limSW1->read() || !limSW2->read()) //if hit switch
 					{
 						dir *= -1; //change dir
@@ -241,7 +240,7 @@ void StepperController::calibrate(){
 				while (times < 2)
 				{
 					move(0, dir);
-
+					totalStepY++;
 					if (!limSW3->read() || !limSW4->read()) //if hit switch
 					{
 						dir *= -1; //change dir

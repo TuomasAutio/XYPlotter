@@ -28,6 +28,7 @@ public:
 	virtual ~StepperController();
 
 	int move(signed int xSteps,signed int ySteps);
+	void calibrate();
 
 private:
 
