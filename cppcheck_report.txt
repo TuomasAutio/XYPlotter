@@ -4,9 +4,13 @@
 [FreeRTOS/src/portable/GCC/ARM_CM3/port.c:183]: (information) Skipping configuration 'configTASK_RETURN_ADDRESS' since the value of 'configTASK_RETURN_ADDRESS' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
 [FreeRTOS/src/tasks.c:2667]: (style) The scope of the variable 'pxTCB' can be reduced.
 [FreeRTOS/src/tasks.c:3882]: (style) The scope of the variable 'pxTCB' can be reduced.
-[XYPlotter/src/StepperController.cpp:168]: (error) Memory pointed to by 'limSW1' is freed twice.
-[XYPlotter/src/StepperController.cpp:169]: (error) Memory pointed to by 'limSW1' is freed twice.
+[XYPlotter/src/StepperController.cpp:133]: (warning) Member variable 'StepperController::totalStepY' is not initialized in the constructor.
+[XYPlotter/src/StepperController.cpp:133]: (warning) Member variable 'StepperController::totalStepX' is not initialized in the constructor.
+[XYPlotter/src/StepperController.cpp:133]: (warning) Member variable 'StepperController::ySteps' is not initialized in the constructor.
+[XYPlotter/src/StepperController.cpp:133]: (warning) Member variable 'StepperController::xSteps' is not initialized in the constructor.
 [XYPlotter/src/StepperController.cpp:170]: (error) Memory pointed to by 'limSW1' is freed twice.
+[XYPlotter/src/StepperController.cpp:171]: (error) Memory pointed to by 'limSW1' is freed twice.
+[XYPlotter/src/StepperController.cpp:172]: (error) Memory pointed to by 'limSW1' is freed twice.
 [XYPlotter/src/tools/UartController.h:24]: (style) Class 'UartController' has a constructor with 1 argument that is not explicit.
 [XYPlotter/src/XYPlotter.cpp:168]: (error) Uninitialized variable: x0
 [XYPlotter/src/XYPlotter.cpp:169]: (error) Uninitialized variable: y0
