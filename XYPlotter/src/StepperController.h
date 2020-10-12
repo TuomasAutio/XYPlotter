@@ -16,7 +16,11 @@
 #include "tools/Singleton.h"
 #include "tools/DigitalIoPin.h"
 
-
+enum {
+	toOrigin,
+	xAxis,
+	yAxis,
+};
 
 class StepperController : public Singleton<StepperController>{
 public:
@@ -25,6 +29,13 @@ public:
 
 	int move(signed int xSteps,signed int ySteps);
 
+private:
+
+	int totalStepY;
+	int totalStepX;
+
+	int ySteps;
+	int xSteps;
 
 };
 

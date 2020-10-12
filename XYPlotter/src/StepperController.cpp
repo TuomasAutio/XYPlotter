@@ -33,11 +33,13 @@ void MRT_IRQHandler(void)
 		/* Channel 0 */
 		if (int_pend & MRTn_INTFLAG(0)) {
 			--MRT_count;
+			totalStepsX++;
 			xMotor->flip();
 		}
 		/* Channel 1 */
 		if (int_pend & MRTn_INTFLAG(1)) {
 			--MRT_count;
+			totalStepsY++;
 			yMotor->flip();
 
 		}
@@ -198,6 +200,60 @@ int StepperController::move(signed int xSteps,signed int ySteps){
 	MRT_start(xSteps*2, ySteps*2); // increment by 2 for iopin->flip() functionality
 
 	return 1; // ph
+}
+
+void StepperController::calibrate(){
+	bool calibrated = false;
+	int dir = 1;
+	int times = 0;
+
+	while (!calibrated)
+	{
+
+		switch(calibState < toOrigin)
+		{
+			case toOrigin:
+				if (!limSW1->read() && !limSW2->read()) //move x until hit limit switch
+					move(dir,0);
+				if (!limSW3->read() && !limSW4->read()) //move y until hit limit switch
+					move(0,dir);
+				totalStepX = 0;
+				totalStepY = 0;
+				calibState = xAxis;
+				dir *= 1;
+				break;
+			case xAxis:									// xAxis calibration
+				while (times < 2) // do 2 runs
+				{
+					move(dir, 0);
+
+					if (!limSW1->read() || !limSW2->read()) //if hit switch
+					{
+						dir *= -1; //change dir
+						times++;
+					}
+				}
+				xSteps = totalStepX / 2; //get average
+				times = 0; //reset counter
+				calibState = yAxis; //move to yAxis
+				break;
+			case yAxis:								// yAxis Calibration
+				while (times < 2)
+				{
+					move(0, dir);
+
+					if (!limSW3->read() || !limSW4->read()) //if hit switch
+					{
+						dir *= -1; //change dir
+						times++;
+					}
+				}
+				ySteps = totalStepY / 2; // get average
+				calibrated = true;
+				break;
+		}
+
+	}
 }
 
 
