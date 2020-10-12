@@ -4,9 +4,13 @@
 [FreeRTOS/src/portable/GCC/ARM_CM3/port.c:183]: (information) Skipping configuration 'configTASK_RETURN_ADDRESS' since the value of 'configTASK_RETURN_ADDRESS' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
 [FreeRTOS/src/tasks.c:2667]: (style) The scope of the variable 'pxTCB' can be reduced.
 [FreeRTOS/src/tasks.c:3882]: (style) The scope of the variable 'pxTCB' can be reduced.
-[XYPlotter/src/StepperController.cpp:168]: (error) Memory pointed to by 'limSW1' is freed twice.
-[XYPlotter/src/StepperController.cpp:169]: (error) Memory pointed to by 'limSW1' is freed twice.
+[XYPlotter/src/StepperController.cpp:133]: (warning) Member variable 'StepperController::totalStepY' is not initialized in the constructor.
+[XYPlotter/src/StepperController.cpp:133]: (warning) Member variable 'StepperController::totalStepX' is not initialized in the constructor.
+[XYPlotter/src/StepperController.cpp:133]: (warning) Member variable 'StepperController::ySteps' is not initialized in the constructor.
+[XYPlotter/src/StepperController.cpp:133]: (warning) Member variable 'StepperController::xSteps' is not initialized in the constructor.
 [XYPlotter/src/StepperController.cpp:170]: (error) Memory pointed to by 'limSW1' is freed twice.
+[XYPlotter/src/StepperController.cpp:171]: (error) Memory pointed to by 'limSW1' is freed twice.
+[XYPlotter/src/StepperController.cpp:172]: (error) Memory pointed to by 'limSW1' is freed twice.
 [XYPlotter/src/tools/UartController.h:24]: (style) Class 'UartController' has a constructor with 1 argument that is not explicit.
 [XYPlotter/src/XYPlotter.cpp:168]: (error) Uninitialized variable: x0
 [XYPlotter/src/XYPlotter.cpp:169]: (error) Uninitialized variable: y0
@@ -15,7 +19,11 @@
 [XYPlotter/src/cr_startup_lpc15xx.cpp:384]: (style) The scope of the variable 'LoadAddr' can be reduced.
 [XYPlotter/src/tools/DigitalIoPin.h:19] -> [XYPlotter/src/tools/DigitalIoPin.cpp:12]: (style, inconclusive) Function 'DigitalIoPin' argument 1 names different: declaration 'port' definition 'port_'.
 [XYPlotter/src/tools/DigitalIoPin.h:19] -> [XYPlotter/src/tools/DigitalIoPin.cpp:12]: (style, inconclusive) Function 'DigitalIoPin' argument 2 names different: declaration 'pin' definition 'pin_'.
+[XYPlotter/src/tools/Fmutex.cpp:12]: (performance) Variable 'mutex' is assigned in constructor body. Consider performing initialization in initialization list.
 [XYPlotter/src/tools/LimitedInt.cpp:63] -> [XYPlotter/src/tools/LimitedInt.h:23]: (style, inconclusive) Technically the member function 'LimitedInt::operator==' can be const.
+[XYPlotter/src/tools/LpcUart.cpp:291] -> [XYPlotter/src/tools/LpcUart.h:46]: (performance, inconclusive) Technically the member function 'LpcUart::txbreak' can be static (but you may consider moving to unnamed namespace).
+[XYPlotter/src/tools/LpcUart.cpp:296] -> [XYPlotter/src/tools/LpcUart.h:47]: (performance, inconclusive) Technically the member function 'LpcUart::rxbreak' can be static (but you may consider moving to unnamed namespace).
+[XYPlotter/src/tools/LpcUart.h:35]: (style) Class 'LpcUart' has a constructor with 1 argument that is not explicit.
 [XYPlotter/src/tools/Servo.cpp:7]: (warning) Member variable 'Servo::port' is not initialized in the constructor.
 [XYPlotter/src/tools/Servo.cpp:7]: (warning) Member variable 'Servo::pin' is not initialized in the constructor.
 [XYPlotter/src/tools/UartController.cpp:39] -> [XYPlotter/src/tools/UartController.h:26]: (performance, inconclusive) Technically the member function 'UartController::getUartMessage' can be static (but you may consider moving to unnamed namespace).
@@ -71,7 +79,6 @@
 [lpc_chip_15xx/src/clock_15xx.c:301]: (style) The function 'Chip_Clock_GetSysTickClockRate' is never used.
 [lpc_chip_15xx/src/clock_15xx.c:256]: (style) The function 'Chip_Clock_SetCLKOUTSource' is never used.
 [lpc_chip_15xx/src/clock_15xx.c:384]: (style) The function 'Chip_Clock_SetPLLBypass' is never used.
-[lpc_chip_15xx/src/clock_15xx.c:349]: (style) The function 'Chip_Clock_SetUARTBaseClockRate' is never used.
 [lpc_chip_15xx/src/dac_15xx.c:58]: (style) The function 'Chip_DAC_DeInit' is never used.
 [lpc_chip_15xx/src/dac_15xx.c:51]: (style) The function 'Chip_DAC_Init' is never used.
 [lpc_chip_15xx/src/dma_15xx.c:95]: (style) The function 'Chip_DMA_SetupChannelTransferSize' is never used.
@@ -131,13 +138,8 @@
 [lpc_chip_15xx/src/sysctl_15xx.c:56]: (style) The function 'Chip_SYSCTL_GetCompFreqMeas' is never used.
 [lpc_chip_15xx/src/sysctl_15xx.c:95]: (style) The function 'Chip_SYSCTL_SetWakeup' is never used.
 [lpc_chip_15xx/src/uart_15xx.c:85]: (style) The function 'Chip_UART_DeInit' is never used.
-[lpc_chip_15xx/src/uart_15xx.c:227]: (style) The function 'Chip_UART_IRQRBHandler' is never used.
-[lpc_chip_15xx/src/uart_15xx.c:64]: (style) The function 'Chip_UART_Init' is never used.
 [lpc_chip_15xx/src/uart_15xx.c:142]: (style) The function 'Chip_UART_ReadBlocking' is never used.
-[lpc_chip_15xx/src/uart_15xx.c:219]: (style) The function 'Chip_UART_ReadRB' is never used.
 [lpc_chip_15xx/src/uart_15xx.c:109]: (style) The function 'Chip_UART_SendBlocking' is never used.
-[lpc_chip_15xx/src/uart_15xx.c:197]: (style) The function 'Chip_UART_SendRB' is never used.
-[lpc_chip_15xx/src/uart_15xx.c:158]: (style) The function 'Chip_UART_SetBaud' is never used.
 [lpc_chip_15xx/src/uart_15xx.c:166]: (style) The function 'Chip_UART_SetBaudWithRTC32K' is never used.
 [lpc_chip_15xx/src/chip_15xx.c:61]: (style) The function 'Chip_USB_Init' is never used.
 [lpc_chip_15xx/src/wwdt_15xx.c:63]: (style) The function 'Chip_WWDT_ClearStatusFlag' is never used.
@@ -176,7 +178,6 @@
 [FreeRTOS/src/portable/Common/mpu_wrappers.c:515]: (style) The function 'MPU_xTaskCheckForTimeOut' is never used.
 [FreeRTOS/src/portable/Common/mpu_wrappers.c:299]: (style) The function 'MPU_xTaskGetTickCount' is never used.
 [FreeRTOS/src/portable/Common/mpu_wrappers.c:288]: (style) The function 'MPU_xTaskResumeAll' is never used.
-[lpc_chip_15xx/src/ring_buffer.c:55]: (style) The function 'RingBuffer_Init' is never used.
 [XYPlotter/src/tools/UartController.cpp:51]: (style) The function 'SendUartMessage' is never used.
 [lpc_chip_15xx/src/stopwatch_15xx.c:57]: (style) The function 'StopWatch_Init' is never used.
 [lpc_chip_15xx/src/stopwatch_15xx.c:97]: (style) The function 'StopWatch_MsToTicks' is never used.
@@ -190,11 +191,17 @@
 [XYPlotter/src/cr_cpp_config.cpp:86]: (style) The function '__verbose_terminate_handler' is never used.
 [XYPlotter/src/tools/Assingments/PlottingSimulator.cpp:20]: (style) The function 'clamp' is never used.
 [XYPlotter/src/tools/UartController.cpp:19]: (style) The function 'getUartMessageFromFile' is never used.
+[XYPlotter/src/tools/LpcUart.cpp:211]: (style) The function 'peek' is never used.
 [FreeRTOS/src/tasks.c:1072]: (style) The function 'prvAddNewTaskToReadyList' is never used.
 [FreeRTOS/src/queue.c:429]: (style) The function 'prvInitialiseNewQueue' is never used.
 [FreeRTOS/src/tasks.c:821]: (style) The function 'prvInitialiseNewTask' is never used.
 [XYPlotter/src/tools/Assingments/PlottingSimulator.cpp:29]: (style) The function 'responseForMdraw' is never used.
+[XYPlotter/src/tools/LpcUart.cpp:296]: (style) The function 'rxbreak' is never used.
 [XYPlotter/src/XYPlotter.cpp:61]: (style) The function 'servoTask' is never used.
+[XYPlotter/src/tools/LpcUart.cpp:198]: (style) The function 'set_on_receive' is never used.
+[XYPlotter/src/tools/LpcUart.cpp:291]: (style) The function 'txbreak' is never used.
+[XYPlotter/src/tools/LpcUart.cpp:310]: (style) The function 'txempty' is never used.
+[XYPlotter/src/tools/Fmutex.cpp:25]: (style) The function 'unlock' is never used.
 [FreeRTOS/src/queue.c:1959]: (style) The function 'uxQueueMessagesWaitingFromISR' is never used.
 [FreeRTOS/src/FreeRTOSCommonHooks.c:77]: (style) The function 'vApplicationIdleHook' is never used.
 [FreeRTOS/src/FreeRTOSCommonHooks.c:69]: (style) The function 'vApplicationMallocFailedHook' is never used.
