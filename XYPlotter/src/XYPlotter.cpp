@@ -138,6 +138,7 @@ static void vUartTask(void *pvParameters) {
 
 			vTaskDelay(10);
 			str[count] = '\0';
+
 			//ITM_write(str);
 
 			auto cmd = parse.parse(str);
@@ -160,14 +161,14 @@ int main(void) {
 	prvSetupHardware();
 	q_cmd = xQueueCreate(1, sizeof(Command));
 	//ITM_init();
-	//assert(q_cmd != NULL);
+	assert(q_cmd != NULL);
 
 	xTaskCreate(stepperTask, "stepperTask",
-			configMINIMAL_STACK_SIZE * 4, NULL, (tskIDLE_PRIORITY + 1UL),
+			configMINIMAL_STACK_SIZE * 4, NULL, (tskIDLE_PRIORITY + 2UL),
 			(TaskHandle_t *) NULL);
 
 	xTaskCreate(vUartTask, "Uart Task",
-			configMINIMAL_STACK_SIZE * 4, NULL, (tskIDLE_PRIORITY + 2UL),
+			configMINIMAL_STACK_SIZE * 4, NULL, (tskIDLE_PRIORITY + 1UL),
 			(TaskHandle_t *) NULL);
 
 

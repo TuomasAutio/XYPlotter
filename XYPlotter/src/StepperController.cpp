@@ -180,9 +180,7 @@ StepperController::~StepperController() {
  * Moves in
  */
 int StepperController::move(signed int xSteps,signed int ySteps){
-	char msg[40];
-	sprintf(msg, "X: %d  Y: %d\n", this->mm_corX, this->mm_corY);
-	//ITM_write(msg);
+
 	update_cor(xSteps, ySteps);
 
 	if(xSteps > 0){

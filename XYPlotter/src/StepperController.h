@@ -29,6 +29,7 @@ public:
 
 	int move(signed int xSteps,signed int ySteps);
 	void calibrate();
+
 	void update_cor(int x, int y);
 	int getX();
 	int getY();
