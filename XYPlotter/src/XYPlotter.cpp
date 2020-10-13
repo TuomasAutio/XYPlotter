@@ -77,7 +77,7 @@ static void stepperTask(void *pvParameters) {
 		xQueueReceive(q_cmd, &cmd, portMAX_DELAY);
 		if (cmd.type == COMMAND_MOVE) {
 			//motor move
-			stepper.move((int) ((cmd.x - stepper.getX())*5), (int) ((cmd.y - stepper.getY())*5));
+			stepper.move((int) (5*cmd.x - stepper.getX()), (int) (5*cmd.y - stepper.getY()));
 		} else if (cmd.type == COMMAND_PEN) {
 			if (cmd.penvalue != 100) {
 				//Move pen
@@ -132,23 +132,25 @@ static void vUartTask(void *pvParameters) {
 	char str[40];
 
 	while (1) {
-		count = UARTobj.read(str, 40, portTICK_PERIOD_MS * 50);
+		count = UARTobj.read(str, 40, portTICK_PERIOD_MS * 10);
 
 		if (count > 0) {
 
 			vTaskDelay(10);
 			str[count] = '\0';
-			ITM_write(str);
+
+			//ITM_write(str);
 
 			auto cmd = parse.parse(str);
 
 			if (cmd.type == COMMAND_START) {
 				//start and calibrate
 				UARTobj.write("M10 XY 380 310 0.00 0.00 A0 B0 H0 S80 U160 D90\r\n");
-				vTaskDelay(1);
+				vTaskDelay(25);
 			} else if (cmd.type == COMMAND_MOVE) xQueueSendToBack(q_cmd, &cmd, portMAX_DELAY);
 			UARTobj.write("OK\r\n");
 			vTaskDelay(10);
+
 
 		}
 	}
@@ -157,9 +159,10 @@ static void vUartTask(void *pvParameters) {
 
 int main(void) {
 	prvSetupHardware();
-	q_cmd = xQueueCreate(5, sizeof(Command));
-	ITM_init();
-	//assert(q_cmd != NULL);
+	q_cmd = xQueueCreate(1, sizeof(Command));
+	//ITM_init();
+
+	assert(q_cmd != NULL);
 
 	xTaskCreate(stepperTask, "stepperTask",
 			configMINIMAL_STACK_SIZE * 4, NULL, (tskIDLE_PRIORITY + 2UL),
