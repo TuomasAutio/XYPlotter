@@ -6,7 +6,7 @@
  */
 
 #include "StepperController.h"
-
+#include "tools/ITM_write.h"
 
 volatile uint32_t MRT_count;
 SemaphoreHandle_t sbRIT;
@@ -180,8 +180,10 @@ StepperController::~StepperController() {
  * Moves in
  */
 int StepperController::move(signed int xSteps,signed int ySteps){
-
-	update_cor((float)xSteps/5, (float)ySteps/5);
+	char msg[40];
+	sprintf(msg, "X: %d  Y: %d\n", this->mm_corX, this->mm_corY);
+	//ITM_write(msg);
+	update_cor(xSteps, ySteps);
 
 	if(xSteps > 0){
 		xMotorDir->write(1);
@@ -257,15 +259,15 @@ void StepperController::calibrate(){
 	}
 }
 
-void StepperController::update_cor(float x, float y) {
+void StepperController::update_cor(int x, int y) {
 	mm_corX += x;
 	mm_corY += y;
 }
 
-float StepperController::getY() {
+int StepperController::getY() {
 	return mm_corY;
 }
 
-float StepperController::getX() {
+int StepperController::getX() {
 	return mm_corX;
 }

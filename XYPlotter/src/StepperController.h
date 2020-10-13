@@ -29,9 +29,9 @@ public:
 
 	int move(signed int xSteps,signed int ySteps);
 	void calibrate();
-	void update_cor(float x, float y);
-	float getX();
-	float getY();
+	void update_cor(int x, int y);
+	int getX();
+	int getY();
 
 
 private:
@@ -42,8 +42,8 @@ private:
 	int ySteps;
 	int xSteps;
 
-	float mm_corX = 190;
-	float mm_corY = 155;
+	int mm_corX = 950;
+	int mm_corY = 775;
 
 };
 
