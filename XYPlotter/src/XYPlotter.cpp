@@ -161,6 +161,7 @@ int main(void) {
 	prvSetupHardware();
 	q_cmd = xQueueCreate(1, sizeof(Command));
 	//ITM_init();
+
 	assert(q_cmd != NULL);
 
 	xTaskCreate(stepperTask, "stepperTask",

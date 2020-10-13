@@ -46,6 +46,7 @@ private:
 	int mm_corX = 950;
 	int mm_corY = 775;
 
+
 };
 
 
