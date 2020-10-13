@@ -19,13 +19,17 @@
 #include <cr_section_macros.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <assert.h>
 #include "FreeRTOS.h"
 #include "task.h"
+#include "queue.h"
+#include "tools/ITM_write.h"
 #include "tools/Servo.h"
-#include "tools/UartController.h"
+#include "tools/LpcUart.h"
 #include "tools/Parser.h"
 #include "StepperController.h"
 
+QueueHandle_t q_cmd;
 
 static void prvSetupHardware(void)
 {
@@ -40,7 +44,6 @@ static void prvSetupHardware(void)
 }
 
 Parser parse;
-UartController uartReader('\n');
 
 /*****************************************************************************
  * Public functions
@@ -58,104 +61,38 @@ void vConfigureTimerForRunTimeStats(void) {
 }
 /* end runtime statictics collection */
 
-static void servoTask(void * pvParameters){
-
-	Servo pen(0, 10);
-
-
-	DigitalIoPin sw1(0,8,DigitalIoPin::pullup);
-	DigitalIoPin sw2(1,6,DigitalIoPin::pullup);
-	DigitalIoPin sw3(1,8,DigitalIoPin::pullup);
-
-	while(1){
-
-		if(sw1.read()){
-			pen.Draw();
-		}else if(sw3.read()){
-			pen.Stop();
-		}
-
-		vTaskDelay(100);
-
-	}
-}
-
 static void stepperTask(void *pvParameters) {
 	StepperController stepper;
 	Servo pen(0, 10);
 	int motordelay = 10;
 	int moveSize = 50;
 
-	srand(2);
+	Command cmd;
+	vTaskDelay(500);
 	pen.Draw();
 	vTaskDelay(500);
 
+
 	while (1) {
-#if 0
-		// random
-		stepper.move((rand() % 100)- 50, (rand() % 100)- 50);
-		vTaskDelay(motordelay);
+		xQueueReceive(q_cmd, &cmd, portMAX_DELAY);
+		if (cmd.type == COMMAND_MOVE) {
+			//motor move
+			stepper.move((int) ((cmd.x - stepper.getX())*5), (int) ((cmd.y - stepper.getY())*5));
+		} else if (cmd.type == COMMAND_PEN) {
+			if (cmd.penvalue != 100) {
+				//Move pen
 
-#elif 0
+			} else {
+				//move Pen
 
-		// circular shape , set canvas size to max and quarter step
-		for(int i = -10; i < 10; i++){
-			stepper.move(i, 10);
-			vTaskDelay(motordelay);
-		}
-
-		for (int j = 10; j > -10; j--){
-			stepper.move(10, j);
-			vTaskDelay(motordelay);
-		}
-
-		for(int i = 10; i > -10; i--){
-			stepper.move(i, -10);
-			vTaskDelay(motordelay);
-		}
-
-		for (int j = -10; j < 10; j++){
-			stepper.move(-10, j);
-			vTaskDelay(motordelay);
-		}
-
-
-#else
-		//  octagon
-		stepper.move(moveSize, 0); // East
-		vTaskDelay(motordelay);
-
-		stepper.move(moveSize, -moveSize); // SouthEast
-		vTaskDelay(motordelay);
-
-		stepper.move(0, -moveSize); // South
-		vTaskDelay(motordelay);
-
-		stepper.move(-moveSize, -moveSize); // SouthWest
-		vTaskDelay(motordelay);
-
-		stepper.move(-moveSize, 0); // West
-		vTaskDelay(motordelay);
-
-		stepper.move(-moveSize, moveSize); // NorthWest
-		vTaskDelay(motordelay);
-
-		stepper.move(0, moveSize); // North
-		vTaskDelay(motordelay);
-
-		stepper.move(moveSize, moveSize); // NorthEeast
-		vTaskDelay(motordelay);
-		moveSize-=5;
-
-		if (moveSize == -55){
-			while(1){
-				pen.Stop();
-				vTaskDelay(10000);
 			}
+		} else if (cmd.type == COMMAND_LASER) {
+			//laser power
+		} else if (cmd.type == COMMAND_ORIGIN) {
+			//Motor move 0,0
+
 		}
-
-#endif
-
+		vTaskDelay(10);
 	}
 }
 /**
@@ -174,40 +111,45 @@ void bresenham(float x0, float y0, float x1, float y1) {
 	auto deltaY = std::abs(dy) / max;
 }
 
-void calibrate() {
+static void vUartTask(void *pvParameters) {
+	LpcPinMap none = { .port = -1, .pin = -1};
+	LpcPinMap txpin1 = { .port = 0, .pin = 18 };
+	LpcPinMap rxpin1 = { .port = 0, .pin = 13 };
+	LpcUartConfig cfg1 = {
+			.pUART = LPC_USART0,
+			.speed = 115200,
+			.data = UART_CFG_DATALEN_8 | UART_CFG_PARITY_NONE | UART_CFG_STOPLEN_1,
+			.rs485 = false,
+			.tx = txpin1,
+			.rx = rxpin1,
+			.rts = none,
+			.cts = none
+	};
+	LpcUart UARTobj(cfg1);
+	Chip_SWM_MovablePortPinAssign(SWM_SWO_O, 1, 2);
 
-}
-
-void worker() {
-	char str[64];
-	float lastX;
-	float lastY;
+	int count;
+	char str[40];
 
 	while (1) {
-		uartReader.getUartMessage(str);
-		auto cmd = parse.parse(str);
+		count = UARTobj.read(str, 40, portTICK_PERIOD_MS * 50);
 
-		if (cmd.type == COMMAND_MOVE) {
-			//motor move
-			bresenham(lastX,lastY,cmd.x,cmd.y);
+		if (count > 0) {
 
-		} else if (cmd.type == COMMAND_PEN) {
-			if (cmd.penvalue != 100) {
-				//Move pen
-			} else {
-				//move Pen
-			}
-		} else if (cmd.type == COMMAND_LASER) {
-			//laser power
-		} else if (cmd.type == COMMAND_START) {
-			//start and calibrate
-			calibrate();
-			lastX = 0;
-			lastY = 0;
-		} else if (cmd.type == COMMAND_ORIGIN) {
-			//Motor move 0,0
-		} else if (cmd.type == COMMAND_READY) {
-			//ready
+			vTaskDelay(10);
+			str[count] = '\0';
+			ITM_write(str);
+
+			auto cmd = parse.parse(str);
+
+			if (cmd.type == COMMAND_START) {
+				//start and calibrate
+				UARTobj.write("M10 XY 380 310 0.00 0.00 A0 B0 H0 S80 U160 D90\r\n");
+				vTaskDelay(1);
+			} else if (cmd.type == COMMAND_MOVE) xQueueSendToBack(q_cmd, &cmd, portMAX_DELAY);
+			UARTobj.write("OK\r\n");
+			vTaskDelay(10);
+
 		}
 	}
 }
@@ -215,16 +157,17 @@ void worker() {
 
 int main(void) {
 	prvSetupHardware();
-
+	q_cmd = xQueueCreate(5, sizeof(Command));
+	ITM_init();
+	//assert(q_cmd != NULL);
 
 	xTaskCreate(stepperTask, "stepperTask",
-			configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
+			configMINIMAL_STACK_SIZE * 4, NULL, (tskIDLE_PRIORITY + 2UL),
 			(TaskHandle_t *) NULL);
-	/*
-	 xTaskCreate(servoTask, "stepperTask",
-			configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
+
+	xTaskCreate(vUartTask, "Uart Task",
+			configMINIMAL_STACK_SIZE * 4, NULL, (tskIDLE_PRIORITY + 1UL),
 			(TaskHandle_t *) NULL);
-			*/
 
 
 	vTaskStartScheduler();

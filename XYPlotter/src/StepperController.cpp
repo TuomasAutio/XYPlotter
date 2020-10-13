@@ -181,6 +181,8 @@ StepperController::~StepperController() {
  */
 int StepperController::move(signed int xSteps,signed int ySteps){
 
+	update_cor((float)xSteps/5, (float)ySteps/5);
+
 	if(xSteps > 0){
 		xMotorDir->write(1);
 	}else{
@@ -255,4 +257,15 @@ void StepperController::calibrate(){
 	}
 }
 
+void StepperController::update_cor(float x, float y) {
+	mm_corX += x;
+	mm_corY += y;
+}
 
+float StepperController::getY() {
+	return mm_corY;
+}
+
+float StepperController::getX() {
+	return mm_corX;
+}
