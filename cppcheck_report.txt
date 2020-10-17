@@ -4,6 +4,9 @@
 [FreeRTOS/src/portable/GCC/ARM_CM3/port.c:183]: (information) Skipping configuration 'configTASK_RETURN_ADDRESS' since the value of 'configTASK_RETURN_ADDRESS' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
 [FreeRTOS/src/tasks.c:2667]: (style) The scope of the variable 'pxTCB' can be reduced.
 [FreeRTOS/src/tasks.c:3882]: (style) The scope of the variable 'pxTCB' can be reduced.
+[XYPlotter.cpp:125] -> [XYPlotter.cpp:139]: (style) Local variable cmd shadows outer variable
+[XYPlotter.cpp:152]: (style) Variable 'okcount' is modified but its new value is never used.
+[XYPlotter.cpp:145]: (style) Variable 'movecount' is modified but its new value is never used.
 [XYPlotter/src/StepperController.cpp:127]: (warning) Member variable 'StepperController::totalStepY' is not initialized in the constructor.
 [XYPlotter/src/StepperController.cpp:127]: (warning) Member variable 'StepperController::totalStepX' is not initialized in the constructor.
 [XYPlotter/src/StepperController.cpp:127]: (warning) Member variable 'StepperController::ySteps' is not initialized in the constructor.
@@ -198,13 +201,14 @@
 [FreeRTOS/src/tasks.c:1072]: (style) The function 'prvAddNewTaskToReadyList' is never used.
 [FreeRTOS/src/queue.c:429]: (style) The function 'prvInitialiseNewQueue' is never used.
 [FreeRTOS/src/tasks.c:821]: (style) The function 'prvInitialiseNewTask' is never used.
+[IoPinInterupts.c:5]: (style) The function 'startLimSwitchCheck' is never used.
 [XYPlotter/src/tools/Fmutex.cpp:25]: (style) The function 'unlock' is never used.
 [FreeRTOS/src/queue.c:1959]: (style) The function 'uxQueueMessagesWaitingFromISR' is never used.
 [FreeRTOS/src/FreeRTOSCommonHooks.c:77]: (style) The function 'vApplicationIdleHook' is never used.
 [FreeRTOS/src/FreeRTOSCommonHooks.c:69]: (style) The function 'vApplicationMallocFailedHook' is never used.
 [FreeRTOS/src/FreeRTOSCommonHooks.c:84]: (style) The function 'vApplicationStackOverflowHook' is never used.
 [FreeRTOS/src/FreeRTOSCommonHooks.c:98]: (style) The function 'vApplicationTickHook' is never used.
-[XYPlotter/src/XYPlotter.cpp:78]: (style) The function 'vConfigureTimerForRunTimeStats' is never used.
+[XYPlotter.cpp:77]: (style) The function 'vConfigureTimerForRunTimeStats' is never used.
 [FreeRTOS/src/event_groups.c:665]: (style) The function 'vEventGroupClearBitsCallback' is never used.
 [FreeRTOS/src/event_groups.c:657]: (style) The function 'vEventGroupSetBitsCallback' is never used.
 [FreeRTOS/src/portable/GCC/ARM_CM3/port.c:361]: (style) The function 'vPortEnterCritical' is never used.
