@@ -23,9 +23,12 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
-#include "tools/ITM_write.h"
+
+#include "IoPinInterupts.c"
+
+#include "../inc/user_vcom.h"
+#include "tools/Laser.h"
 #include "tools/Servo.h"
-#include "tools/LpcUart.h"
 #include "tools/Parser.h"
 #include "StepperController.h"
 
@@ -35,15 +38,35 @@ static void prvSetupHardware(void)
 {
 	SystemCoreClockUpdate();
 	Board_Init();
-	//disable laser
-	//DigitalIoPin laser(0, 12, DigitalIoPin::output, false);
-	//laser.write(false);
 
+
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 3,
+			(IOCON_DIGMODE_EN | IOCON_MODE_INACT | IOCON_MODE_PULLUP ) );
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 0,
+			(IOCON_DIGMODE_EN | IOCON_MODE_INACT | IOCON_MODE_PULLUP ) );
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 9,
+			(IOCON_DIGMODE_EN | IOCON_MODE_INACT | IOCON_MODE_PULLUP ) );
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 29,
+			(IOCON_DIGMODE_EN | IOCON_MODE_INACT | IOCON_MODE_PULLUP ) );
+
+	Chip_INMUX_PinIntSel(0, 1, 3); // LIM1
+	Chip_INMUX_PinIntSel(1, 0, 0); // LIM2
+	Chip_INMUX_PinIntSel(2, 0, 9);  // LIM3
+	Chip_INMUX_PinIntSel(3, 0, 29);  // LIM4
+
+
+	Chip_PININT_ClearIntStatus(LPC_GPIO_PIN_INT, PININTCH(0)| PININTCH(1) | PININTCH(2) | PININTCH(3));
+	Chip_PININT_SetPinModeEdge(LPC_GPIO_PIN_INT, PININTCH(0)| PININTCH(1) | PININTCH(2) | PININTCH(3));
+	Chip_PININT_EnableIntLow  (LPC_GPIO_PIN_INT, PININTCH(0)| PININTCH(1) | PININTCH(2) | PININTCH(3));
+
+	NVIC_SetPriority(PIN_INT0_IRQn, configMAX_SYSCALL_INTERRUPT_PRIORITY+1);
+	NVIC_SetPriority(PIN_INT1_IRQn, configMAX_SYSCALL_INTERRUPT_PRIORITY+1);
+	NVIC_SetPriority(PIN_INT2_IRQn, configMAX_SYSCALL_INTERRUPT_PRIORITY+1);
+	NVIC_SetPriority(PIN_INT3_IRQn, configMAX_SYSCALL_INTERRUPT_PRIORITY+1);
 	/* Initial LED0 state is off */
 	Board_LED_Set(0, false);
 }
 
-Parser parse;
 
 /*****************************************************************************
  * Public functions
@@ -64,32 +87,29 @@ void vConfigureTimerForRunTimeStats(void) {
 static void stepperTask(void *pvParameters) {
 	StepperController stepper;
 	Servo pen(0, 10);
-	int motordelay = 10;
-	int moveSize = 50;
-
 	Command cmd;
-	vTaskDelay(500);
-	pen.Draw();
-	vTaskDelay(500);
+	Laser laser(0,12);
+
+
+	vTaskDelay(3000); // wait for a while for stuff to get ready
 
 
 	while (1) {
 		xQueueReceive(q_cmd, &cmd, portMAX_DELAY);
 		if (cmd.type == COMMAND_MOVE) {
 			//motor move
-			stepper.move((int) (5*cmd.x - stepper.getX()), (int) (5*cmd.y - stepper.getY()));
+			stepper.move((int) (stepper.getSPM()*cmd.x - stepper.getX()), (int) (stepper.getSPM()*cmd.y - stepper.getY()));
 		} else if (cmd.type == COMMAND_PEN) {
-			if (cmd.penvalue != 100) {
-				//Move pen
-
+			if (cmd.penvalue == 90) {
+				pen.Draw();
 			} else {
-				//move Pen
+				pen.Stop();
 
 			}
 		} else if (cmd.type == COMMAND_LASER) {
-			//laser power
+			laser.setVal(cmd.laservalue);
 		} else if (cmd.type == COMMAND_ORIGIN) {
-			//Motor move 0,0
+			stepper.move(((int)0 - stepper.getX()), (int) (0 - stepper.getY()));
 
 		}
 		vTaskDelay(10);
@@ -101,58 +121,41 @@ static void stepperTask(void *pvParameters) {
  */
 
 
-void bresenham(float x0, float y0, float x1, float y1) {
-	auto dx = x1-x0;
-	auto dy = y1-y0;
-
-	auto max = std::max(std::abs(dx),std::abs(dy));
-
-	auto deltaX = std::abs(dx) / max;
-	auto deltaY = std::abs(dy) / max;
-}
 
 static void vUartTask(void *pvParameters) {
-	LpcPinMap none = { .port = -1, .pin = -1};
-	LpcPinMap txpin1 = { .port = 0, .pin = 18 };
-	LpcPinMap rxpin1 = { .port = 0, .pin = 13 };
-	LpcUartConfig cfg1 = {
-			.pUART = LPC_USART0,
-			.speed = 115200,
-			.data = UART_CFG_DATALEN_8 | UART_CFG_PARITY_NONE | UART_CFG_STOPLEN_1,
-			.rs485 = false,
-			.tx = txpin1,
-			.rx = rxpin1,
-			.rts = none,
-			.cts = none
-	};
-	LpcUart UARTobj(cfg1);
-	Chip_SWM_MovablePortPinAssign(SWM_SWO_O, 1, 2);
+	Parser parse;
+	Command cmd;
 
-	int count;
-	char str[40];
+	char msg[80] = "M10 XY 380 310 0.00 0.00 A0 B0 H0 S80 U160 D90\r\nOK\r\n";
+	char OK[6] = "OK\r\n";
 
+	vTaskDelay(100);
+
+	int okcount = 0;
+	int movecount = 0;
 	while (1) {
-		count = UARTobj.read(str, 40, portTICK_PERIOD_MS * 10);
+		char str[80];
+		uint32_t len = USB_receive((uint8_t *)str, 79);
 
-		if (count > 0) {
+		str[len] = 0;
+		auto cmd = parse.parse(str);
 
-			vTaskDelay(10);
-			str[count] = '\0';
-
-			//ITM_write(str);
-
-			auto cmd = parse.parse(str);
-
-			if (cmd.type == COMMAND_START) {
-				//start and calibrate
-				UARTobj.write("M10 XY 380 310 0.00 0.00 A0 B0 H0 S80 U160 D90\r\n");
-				vTaskDelay(25);
-			} else if (cmd.type == COMMAND_MOVE) xQueueSendToBack(q_cmd, &cmd, portMAX_DELAY);
-			UARTobj.write("OK\r\n");
-			vTaskDelay(10);
-
-
+		if (cmd.type == COMMAND_MOVE) {
+			xQueueSendToBack(q_cmd, &cmd, portMAX_DELAY);
+			USB_send((uint8_t *)OK, 4);
+			okcount++;
+			movecount++;
+		} else if (cmd.type == COMMAND_START) {
+			USB_send((uint8_t *)msg, 48);
+			okcount++;
+		} else if (cmd.type == COMMAND_PEN) {
+			xQueueSendToBack(q_cmd, &cmd, portMAX_DELAY);
+			USB_send((uint8_t *)OK, 4);
+			okcount++;
+		} else if (cmd.type == INVALID_COMMAND) {
+			Board_LED_Set(1, true);
 		}
+		vTaskDelay(50);
 	}
 }
 
@@ -160,23 +163,31 @@ static void vUartTask(void *pvParameters) {
 int main(void) {
 	prvSetupHardware();
 	q_cmd = xQueueCreate(1, sizeof(Command));
-	//ITM_init();
 
-	assert(q_cmd != NULL);
+
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 12, IOCON_MODE_INACT | IOCON_DIGMODE_EN);
+	Chip_GPIO_SetPinDIROutput(LPC_GPIO, 0, 12);
+	Chip_GPIO_SetPinState(LPC_GPIO, 0, 12, false);
+
+	//assert(q_cmd != NULL);
 
 	xTaskCreate(stepperTask, "stepperTask",
-			configMINIMAL_STACK_SIZE * 4, NULL, (tskIDLE_PRIORITY + 2UL),
+			configMINIMAL_STACK_SIZE * 4, NULL, (tskIDLE_PRIORITY + 1UL),
 			(TaskHandle_t *) NULL);
 
 	xTaskCreate(vUartTask, "Uart Task",
-			configMINIMAL_STACK_SIZE * 4, NULL, (tskIDLE_PRIORITY + 1UL),
+			configMINIMAL_STACK_SIZE * 16, NULL, (tskIDLE_PRIORITY + 1UL),
+			(TaskHandle_t *) NULL);
+
+	xTaskCreate(cdc_task, "CDC",
+			configMINIMAL_STACK_SIZE * 3, NULL, (tskIDLE_PRIORITY + 1UL),
 			(TaskHandle_t *) NULL);
 
 
 	vTaskStartScheduler();
 	/* Should never arrive here */
 
-	while(1);
+	while(1)
 
 	return 0 ;
 

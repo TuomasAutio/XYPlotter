@@ -16,6 +16,9 @@
 #include "tools/Singleton.h"
 #include "tools/DigitalIoPin.h"
 
+#define WIDTH 380
+#define HEIGHT 310
+
 enum {
 	toOrigin,
 	xAxis,
@@ -27,12 +30,13 @@ public:
 	StepperController();
 	virtual ~StepperController();
 
-	int move(signed int xSteps,signed int ySteps);
+	void move(signed int xSteps,signed int ySteps);
 	void calibrate();
 
 	void update_cor(int x, int y);
 	int getX();
 	int getY();
+	int getSPM();
 
 
 private:
@@ -43,9 +47,9 @@ private:
 	int ySteps;
 	int xSteps;
 
-	int mm_corX = 950;
-	int mm_corY = 775;
-
+	int CordinateX = 950;
+	int CordinateY = 775;
+	int stepsPerMM;
 
 };
 

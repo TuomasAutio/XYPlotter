@@ -31,6 +31,7 @@ struct Command {
 	float y = 0;
 	bool absolute = NULL;
 	int penvalue = 0;
+	int laservalue = 0;
 };
 
 class Parser : public Singleton<Parser> {

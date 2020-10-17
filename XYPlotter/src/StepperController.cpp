@@ -6,7 +6,6 @@
  */
 
 #include "StepperController.h"
-#include "tools/ITM_write.h"
 
 volatile uint32_t MRT_count;
 SemaphoreHandle_t sbRIT;
@@ -82,25 +81,21 @@ static void setupMRT(uint8_t ch, MRT_MODE_T mode, uint32_t rate)
 }
 
 void MRT_start(int xCount, int yCount) {
-	//uint64_t cmp_value;
-	// Determine approximate compare value based on clock rate and passed interval
-	//cmp_value = (uint64_t) Chip_Clock_GetSystemClockRate() * (uint64_t) us / 1000000;
-
 
 	for (int mrtch = 0; mrtch < MRT_CHANNELS_NUM; mrtch++) {
 		Chip_MRT_SetDisabled(Chip_MRT_GetRegPtr(mrtch));
 	}
 
-	//MRT_count = ((xCount > yCount) ? xCount : yCount); // check witch one is the higest, the lower one will havee its tickrate adjusted.
 
-	MRT_count = xCount + yCount;
+	MRT_count = xCount + yCount; // ammount of motor movements needed
+
+	MRT_count *= 2; // increment by 2 to account for IoPin->flip() on off cycle
 
 	NVIC_EnableIRQ(MRT_IRQn);
 
 
 	if ((xCount != 0) && (yCount != 0)){// check if one number is zero
-		assert(yCount != 0);
-		assert(xCount != 0);
+		// move both motors at the same time
 		float ratio =  (float)yCount/(float)xCount;
 
 		setupMRT(0, MRT_MODE_REPEAT, 1000);/* n Hz rate */
@@ -108,10 +103,11 @@ void MRT_start(int xCount, int yCount) {
 
 
 	}else {
+		// move one dir
 		if(yCount == 0){
-			setupMRT(0, MRT_MODE_REPEAT, 2000);
+			setupMRT(0, MRT_MODE_REPEAT, 1000);
 		}else{
-			setupMRT(1, MRT_MODE_REPEAT, 2000);
+			setupMRT(1, MRT_MODE_REPEAT, 1000);
 		}
 
 	}
@@ -177,29 +173,30 @@ StepperController::~StepperController() {
 }
 
 /*
- * Moves in
+ * Moves the servo motors +-xy dir,
+ * @Param xSteps: steps to move in xAxis, takes positive or negative number
+ * @Param ySteps: steps to move in xAxis, takes positive or negative number
  */
-int StepperController::move(signed int xSteps,signed int ySteps){
+void StepperController::move(signed int xSteps,signed int ySteps){
 
 	update_cor(xSteps, ySteps);
 
 	if(xSteps > 0){
 		xMotorDir->write(1);
 	}else{
-		xSteps *= -1; // reverse number
+		xSteps *= -1; // reverse number and set motor dir
 		xMotorDir->write(0);
 	}
 	if(ySteps > 0){
 		yMotorDir->write(1);
 	}else {
-		ySteps *= -1; // reverse number
+		ySteps *= -1; /// reverse number and set motor dir
 		yMotorDir->write(0);
 	}
 
 
-	MRT_start(xSteps*2, ySteps*2); // increment by 2 for iopin->flip() functionality
+	MRT_start(xSteps, ySteps);
 
-	return 1; // ph
 }
 
 void StepperController::calibrate(){
@@ -234,6 +231,7 @@ void StepperController::calibrate(){
 						times++;
 					}
 				}
+				stepsPerMM = totalStepX / WIDTH;
 				xSteps = totalStepX / 2; //get average
 				times = 0; //reset counter
 				calibState = yAxis; //move to yAxis
@@ -258,15 +256,18 @@ void StepperController::calibrate(){
 }
 
 void StepperController::update_cor(int x, int y) {
-	mm_corX += x;
-	mm_corY += y;
+	CordinateX += x;
+	CordinateY += y;
 }
 
 int StepperController::getY() {
-	return mm_corY;
+	return CordinateY;
 }
 
 int StepperController::getX() {
-	return mm_corX;
+	return CordinateX;
 }
 
+int StepperController::getSPM() {
+	return stepsPerMM;
+}

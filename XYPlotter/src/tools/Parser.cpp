@@ -23,12 +23,12 @@ Command Parser::parse(const char* cmdLine) {
  *
  */
 void Parser::getMovetype(const char* line, Command& cmd) {
-	cmd.type = INVALID_COMMAND; // if matching command not found, stays as invalid command
+	cmd.type = INVALID_COMMAND; 						// if matching command not found, stays as invalid command
 	if (strstr(line, "G1 ") != nullptr)
 		cmd.type = COMMAND_MOVE;
 	else if (strstr(line, "G28 ")!= nullptr)
 		cmd.type = COMMAND_ORIGIN;
-	else if (strstr(line, "M10 ")!= nullptr)
+	else if (strstr(line, "M10\n")!= nullptr)
 		cmd.type = COMMAND_START;
 	else if (strstr(line, "M1 ")!= nullptr)
 		cmd.type = COMMAND_PEN;
@@ -37,15 +37,15 @@ void Parser::getMovetype(const char* line, Command& cmd) {
 }
 
 /**
- * @param *line the command string
+ * @param *line the command string, &Command struct
  *
  */
 void Parser::getParams(const char* line, Command& cmd) {
 	//find according params and cast to correct types
 	if (cmd.type == COMMAND_MOVE) {
-		cmd.x = std::stof(findValue('X', line));
-		cmd.y = std::stof(findValue('Y', line));
-		cmd.absolute = std::stoi(findValue('A', line)) == 1 ? true : false;
+		cmd.x = std::stof(findValue('X', line));								//set x value
+		cmd.y = std::stof(findValue('Y', line));								//set y value
+		cmd.absolute = std::stoi(findValue('A', line)) == 1 ? true : false;		//set abs value
 	}
 	else if (cmd.type == COMMAND_ORIGIN) {
 		//goto origin
@@ -55,7 +55,11 @@ void Parser::getParams(const char* line, Command& cmd) {
 	}
 	else if (cmd.type == COMMAND_LASER) {
 		strtok((char*)line, " ");
-		cmd.penvalue = std::stoi(strtok(NULL, " "));
+		cmd.laservalue = std::stoi(strtok(NULL, " "));							//set laser value
+	}
+	else if (cmd.type == COMMAND_PEN) {
+		strtok((char*)line, " ");
+		cmd.penvalue = std::stoi(strtok(NULL, " "));							//set pen value
 	}
 }
 
@@ -66,12 +70,12 @@ void Parser::getParams(const char* line, Command& cmd) {
 const char* Parser::findValue(const char key, const char* cmdline) {
 	int pos = -1;
 	for (size_t i = 0; i < strlen(cmdline); i++)
-		if (cmdline[i] == key)
-			pos = i;
+		if (cmdline[i] == key) 						//if we find the key
+			pos = i; 								//set pos
 
-	if (pos == -1)
+	if (pos == -1)									//if pos not found return 0
 		return 0;
 
-	auto ret = cmdline + pos + 1;
+	auto ret = cmdline + pos + 1; 					//get pos we want
 	return ret;
 }
