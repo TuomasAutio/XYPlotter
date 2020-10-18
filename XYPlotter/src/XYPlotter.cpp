@@ -86,7 +86,7 @@ void vConfigureTimerForRunTimeStats(void) {
 }
 /* end runtime statictics collection */
 
-static void stepperTask(void *pvParameters) {
+static void DrawTask(void *pvParameters) {
 	StepperController stepper;
 	Servo pen(0, 10);
 	Command cmd;
@@ -123,7 +123,7 @@ static void stepperTask(void *pvParameters) {
 
 
 
-static void vUartTask(void *pvParameters) {
+static void CommandParseTask(void *pvParameters) {
 	Parser parse;
 	Command cmd;
 
@@ -154,12 +154,12 @@ int main(void) {
 	prvSetupHardware();
 	q_cmd = xQueueCreate(5, sizeof(Command));
 
-	xTaskCreate(stepperTask, "stepperTask",
+	xTaskCreate(DrawTask, "stepperTask",
 			configMINIMAL_STACK_SIZE * 4, NULL, (tskIDLE_PRIORITY + 1UL),
 			(TaskHandle_t *) NULL);
 
-	xTaskCreate(vUartTask, "Uart Task",
-			configMINIMAL_STACK_SIZE * 16, NULL, (tskIDLE_PRIORITY + 1UL),
+	xTaskCreate(CommandParseTask, "Uart Task",
+			configMINIMAL_STACK_SIZE * 5, NULL, (tskIDLE_PRIORITY + 1UL),
 			(TaskHandle_t *) NULL);
 
 	xTaskCreate(cdc_task, "CDC",
