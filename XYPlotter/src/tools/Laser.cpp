@@ -29,7 +29,7 @@ void Laser::setVal(signed int val){
     int percent = (int) (((float)val/255)*100);
     if(percent > 0) {
             LPC_SCT1->OUT[0].SET = (1 << 0); // event 2 will set SCTx_OUT0
-            LPC_SCT1->MATCHREL[1].L = percent * 10;
+            LPC_SCT1->MATCHREL[1].L = percent * 200;
         }
         else {
             LPC_SCT1->OUT[0].SET = 0; // event 2 has no effect on  SCTx_OUT0 --> laser is always off
