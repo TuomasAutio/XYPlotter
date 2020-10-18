@@ -17,7 +17,7 @@
 [XYPlotter/src/StepperController.cpp:164]: (error) Memory pointed to by 'limSW1' is freed twice.
 [XYPlotter/src/StepperController.cpp:165]: (error) Memory pointed to by 'limSW1' is freed twice.
 [XYPlotter/src/StepperController.cpp:166]: (error) Memory pointed to by 'limSW1' is freed twice.
-[XYPlotter/src/XYPlotter.cpp:129] -> [XYPlotter/src/XYPlotter.cpp:140]: (style) Local variable cmd shadows outer variable
+[XYPlotter/src/XYPlotter.cpp:128] -> [XYPlotter/src/XYPlotter.cpp:139]: (style) Local variable cmd shadows outer variable
 [XYPlotter/src/cdc_vcom.c:119]: (style) The scope of the variable 'ep_indx' can be reduced.
 [XYPlotter/src/cdc_vcom.h:95] -> [XYPlotter/src/cdc_vcom.c:179]: (style, inconclusive) Function 'vcom_read_req' argument 2 names different: declaration 'buf_len' definition 'len'.
 [XYPlotter/src/cdc_vcom.h:117] -> [XYPlotter/src/cdc_vcom.c:213]: (style, inconclusive) Function 'vcom_write' argument 2 names different: declaration 'buf_len' definition 'len'.
@@ -28,7 +28,7 @@
 [XYPlotter/src/tools/Laser.cpp:5]: (warning) Member variable 'Laser::port' is not initialized in the constructor.
 [XYPlotter/src/tools/Laser.cpp:5]: (warning) Member variable 'Laser::pin' is not initialized in the constructor.
 [XYPlotter/src/tools/Laser.cpp:5]: (warning) Member variable 'Laser::laserVals' is not initialized in the constructor.
-[XYPlotter/src/tools/Laser.cpp:29] -> [XYPlotter/src/tools/Laser.h:16]: (performance, inconclusive) Technically the member function 'Laser::setVal' can be static (but you may consider moving to unnamed namespace).
+[XYPlotter/src/tools/Laser.cpp:28] -> [XYPlotter/src/tools/Laser.h:16]: (performance, inconclusive) Technically the member function 'Laser::setVal' can be static (but you may consider moving to unnamed namespace).
 [XYPlotter/src/tools/Servo.cpp:7]: (warning) Member variable 'Servo::port' is not initialized in the constructor.
 [XYPlotter/src/tools/Servo.cpp:7]: (warning) Member variable 'Servo::pin' is not initialized in the constructor.
 [lpc_board_nxp_lpcxpresso_1549/src/board.c:0]: (information) Too many #ifdef configurations - cppcheck only checks 12 of 15 configurations. Use --force to check all configurations.
@@ -200,7 +200,7 @@
 [FreeRTOS/src/tasks.c:1072]: (style) The function 'prvAddNewTaskToReadyList' is never used.
 [FreeRTOS/src/queue.c:429]: (style) The function 'prvInitialiseNewQueue' is never used.
 [FreeRTOS/src/tasks.c:821]: (style) The function 'prvInitialiseNewTask' is never used.
-[IoPinInterupts.c:5]: (style) The function 'startLimSwitchCheck' is never used.
+[XYPlotter/src/IoPinInterupts.c:19]: (style) The function 'stopLimSwitchCheck' is never used.
 [XYPlotter/src/tools/Fmutex.cpp:25]: (style) The function 'unlock' is never used.
 [FreeRTOS/src/queue.c:1959]: (style) The function 'uxQueueMessagesWaitingFromISR' is never used.
 [FreeRTOS/src/FreeRTOSCommonHooks.c:77]: (style) The function 'vApplicationIdleHook' is never used.
