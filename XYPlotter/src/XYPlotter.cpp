@@ -33,13 +33,15 @@
 #include "StepperController.h"
 
 QueueHandle_t q_cmd;
-DigitalIoPin *lazer;
+
 static void prvSetupHardware(void)
 {
 	SystemCoreClockUpdate();
 	Board_Init();
 
-	lazer = new DigitalIoPin(0,12,DigitalIoPin::output);
+	DigitalIoPin lazer(0,12,DigitalIoPin::output);
+	lazer.write(false);
+
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 3,
 			(IOCON_DIGMODE_EN | IOCON_MODE_INACT | IOCON_MODE_PULLUP ) );
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 0,
@@ -88,17 +90,13 @@ static void stepperTask(void *pvParameters) {
 	StepperController stepper;
 	Servo pen(0, 10);
 	Command cmd;
-	//Laser laser(0,12);
-
-
-	vTaskDelay(1000); // wait for a while for stuff to get ready
+	Laser laser(0,12);
 
 	stepper.calibrate();
 
 	while (1) {
 		xQueueReceive(q_cmd, &cmd, portMAX_DELAY);
 		if (cmd.type == COMMAND_MOVE) {
-			//motor move
 			stepper.move((int) (stepper.getSPM()*cmd.x - stepper.getX()),
 						 (int) (stepper.getSPM()*cmd.y - stepper.getY()));
 		} else if (cmd.type == COMMAND_PEN) {
@@ -109,9 +107,10 @@ static void stepperTask(void *pvParameters) {
 
 			}
 		} else if (cmd.type == COMMAND_LASER) {
-
-		} else if (cmd.type == COMMAND_ORIGIN) {
+				laser.setVal(cmd.laservalue);
+		} else if (cmd.type == COMMAND_ORIGIN || cmd.type == COMMAND_START) {
 			stepper.move(((int)0 - stepper.getX()), (int) (0 - stepper.getY()));
+			startLimSwitchCheck();
 
 		}
 		vTaskDelay(10);
@@ -143,16 +142,17 @@ static void vUartTask(void *pvParameters) {
 			xQueueSendToBack(q_cmd, &cmd, portMAX_DELAY);
 			USB_send((uint8_t *)OK, 4);
 		} else if (cmd.type == COMMAND_START) {
+			xQueueSendToBack(q_cmd, &cmd, portMAX_DELAY);
 			USB_send((uint8_t *)msg, 48);
 		} else Board_LED_Set(1, true);
-		vTaskDelay(50);
+		vTaskDelay(500);
 	}
 }
 
 
 int main(void) {
 	prvSetupHardware();
-	q_cmd = xQueueCreate(1, sizeof(Command));
+	q_cmd = xQueueCreate(5, sizeof(Command));
 
 	xTaskCreate(stepperTask, "stepperTask",
 			configMINIMAL_STACK_SIZE * 4, NULL, (tskIDLE_PRIORITY + 1UL),
@@ -170,7 +170,7 @@ int main(void) {
 	vTaskStartScheduler();
 	/* Should never arrive here */
 
-	while(1)
+	while(1);
 
 	return 0 ;
 

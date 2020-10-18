@@ -42,6 +42,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/FreeRTOS/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/FreeRTOS/src/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/FreeRTOS/src/portable/GCC/ARM_CM3}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/lpc_chip_15xx/inc/usbd}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/XYPlotter/inc}&quot;"/>
 								</option>
 								<option id="com.crt.advproject.cpp.misc.dialect.1881605471" name="Language standard" superClass="com.crt.advproject.cpp.misc.dialect" useByScannerDiscovery="true" value="com.crt.advproject.misc.dialect.cpp11" valueType="enumerated"/>
 								<option id="com.crt.advproject.cpp.fpu.358913612" name="Floating point" superClass="com.crt.advproject.cpp.fpu" useByScannerDiscovery="true"/>
@@ -87,6 +89,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/FreeRTOS/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/FreeRTOS/src/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/FreeRTOS/src/portable/GCC/ARM_CM3}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/lpc_chip_15xx/inc/usbd}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/XYPlotter/inc}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1240747943" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="com.crt.advproject.assembler.input.1193493004" name="Additional Assembly Source Files" superClass="com.crt.advproject.assembler.input"/>
