@@ -145,7 +145,7 @@ static void vUartTask(void *pvParameters) {
 			xQueueSendToBack(q_cmd, &cmd, portMAX_DELAY);
 			USB_send((uint8_t *)msg, 48);
 		} else Board_LED_Set(1, true);
-		vTaskDelay(500);
+		vTaskDelay(50);
 	}
 }
 
