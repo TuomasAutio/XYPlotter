@@ -219,6 +219,7 @@ void StepperController::calibrate(){
 				totalStepY = 0;
 				calibState = xAxis;
 				dir *= -1;
+
 				break;
 			case xAxis:									// xAxis calibration
 				while (times < 2) // do 2 runs
@@ -231,8 +232,8 @@ void StepperController::calibrate(){
 						times++;
 					}
 				}
-				stepsPerMM = totalStepX / WIDTH;
 				xSteps = totalStepX / 2; //get average
+
 				times = 0; //reset counter
 				calibState = yAxis; //move to yAxis
 				break;
@@ -248,6 +249,9 @@ void StepperController::calibrate(){
 					}
 				}
 				ySteps = totalStepY / 2; // get average
+				stepsPerMM = ySteps / HEIGHT;
+				CordinateX = xSteps;
+				CordinateY = ySteps;
 				calibrated = true;
 				break;
 		}

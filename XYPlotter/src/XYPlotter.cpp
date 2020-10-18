@@ -33,13 +33,13 @@
 #include "StepperController.h"
 
 QueueHandle_t q_cmd;
-
+DigitalIoPin *lazer;
 static void prvSetupHardware(void)
 {
 	SystemCoreClockUpdate();
 	Board_Init();
 
-
+	lazer = new DigitalIoPin(0,12,DigitalIoPin::output);
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 3,
 			(IOCON_DIGMODE_EN | IOCON_MODE_INACT | IOCON_MODE_PULLUP ) );
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 0,
@@ -88,17 +88,19 @@ static void stepperTask(void *pvParameters) {
 	StepperController stepper;
 	Servo pen(0, 10);
 	Command cmd;
-	Laser laser(0,12);
+	//Laser laser(0,12);
 
 
-	vTaskDelay(3000); // wait for a while for stuff to get ready
+	vTaskDelay(1000); // wait for a while for stuff to get ready
 
+	stepper.calibrate();
 
 	while (1) {
 		xQueueReceive(q_cmd, &cmd, portMAX_DELAY);
 		if (cmd.type == COMMAND_MOVE) {
 			//motor move
-			stepper.move((int) (stepper.getSPM()*cmd.x - stepper.getX()), (int) (stepper.getSPM()*cmd.y - stepper.getY()));
+			stepper.move((int) (stepper.getSPM()*cmd.x - stepper.getX()),
+						 (int) (stepper.getSPM()*cmd.y - stepper.getY()));
 		} else if (cmd.type == COMMAND_PEN) {
 			if (cmd.penvalue == 90) {
 				pen.Draw();
@@ -107,7 +109,7 @@ static void stepperTask(void *pvParameters) {
 
 			}
 		} else if (cmd.type == COMMAND_LASER) {
-			laser.setVal(cmd.laservalue);
+
 		} else if (cmd.type == COMMAND_ORIGIN) {
 			stepper.move(((int)0 - stepper.getX()), (int) (0 - stepper.getY()));
 
@@ -130,9 +132,6 @@ static void vUartTask(void *pvParameters) {
 	char OK[6] = "OK\r\n";
 
 	vTaskDelay(100);
-
-	int okcount = 0;
-	int movecount = 0;
 	while (1) {
 		char str[80];
 		uint32_t len = USB_receive((uint8_t *)str, 79);
@@ -140,21 +139,12 @@ static void vUartTask(void *pvParameters) {
 		str[len] = 0;
 		auto cmd = parse.parse(str);
 
-		if (cmd.type == COMMAND_MOVE) {
+		if (cmd.type != INVALID_COMMAND && cmd.type != COMMAND_START) {
 			xQueueSendToBack(q_cmd, &cmd, portMAX_DELAY);
 			USB_send((uint8_t *)OK, 4);
-			okcount++;
-			movecount++;
 		} else if (cmd.type == COMMAND_START) {
 			USB_send((uint8_t *)msg, 48);
-			okcount++;
-		} else if (cmd.type == COMMAND_PEN) {
-			xQueueSendToBack(q_cmd, &cmd, portMAX_DELAY);
-			USB_send((uint8_t *)OK, 4);
-			okcount++;
-		} else if (cmd.type == INVALID_COMMAND) {
-			Board_LED_Set(1, true);
-		}
+		} else Board_LED_Set(1, true);
 		vTaskDelay(50);
 	}
 }
@@ -163,13 +153,6 @@ static void vUartTask(void *pvParameters) {
 int main(void) {
 	prvSetupHardware();
 	q_cmd = xQueueCreate(1, sizeof(Command));
-
-
-	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 12, IOCON_MODE_INACT | IOCON_DIGMODE_EN);
-	Chip_GPIO_SetPinDIROutput(LPC_GPIO, 0, 12);
-	Chip_GPIO_SetPinState(LPC_GPIO, 0, 12, false);
-
-	//assert(q_cmd != NULL);
 
 	xTaskCreate(stepperTask, "stepperTask",
 			configMINIMAL_STACK_SIZE * 4, NULL, (tskIDLE_PRIORITY + 1UL),

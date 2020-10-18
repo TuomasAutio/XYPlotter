@@ -47,8 +47,8 @@ private:
 	int ySteps;
 	int xSteps;
 
-	int CordinateX = 950;
-	int CordinateY = 775;
+	int CordinateX;
+	int CordinateY;
 	int stepsPerMM;
 
 };
