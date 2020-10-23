@@ -43,18 +43,3 @@ void Servo::Draw() {
 		vTaskDelay(1);
 	}
 }
-/*
-void Servo::penDown() {
-	while(LPC_SCTLARGE0->MATCHREL[1].L <= penDown_cycle_length) {
-		++LPC_SCTLARGE0->MATCHREL[1].L;
-		vTaskDelay(1);
-	}
-}
-
-void Servo::penUp() {
-	while(LPC_SCTLARGE0->MATCHREL[1].L >= penUp_cycle_length) {
-		--LPC_SCTLARGE0->MATCHREL[1].L;
-		vTaskDelay(1);
-	}
-}
-*/
