@@ -1,7 +1,7 @@
 #include "Servo.h"
 #include "chip.h"
 
-#define PENUP 1640
+#define PENUP 1640 // initial values
 #define PENDOWN 1365
 
 Servo::Servo(int port, int pin)
@@ -13,7 +13,6 @@ Servo::Servo(int port, int pin)
 		LPC_SCT0->CTRL_L |= (72 - 1) << 5;// Set prescaler, SCTimer/PWM Clock = 1 Mhz
 
 		LPC_SCT0->MATCHREL[0].L = 20000 - 1;// Match 0 @ 1000/1MHz = (1 kHz PWM freq)
-		LPC_SCT0->MATCHREL[1].L = 2000;// Match 1 user for duty cycle (in 10 steps)
 
 		LPC_SCT0->EVENT[0].STATE = 0xFFFFFFFF;// Event 0 happens in all states
 		LPC_SCT0->EVENT[0].CTRL = (1 << 12);// Match 0 condition only
@@ -43,7 +42,6 @@ void Servo::Draw() {
 		vTaskDelay(1);
 	}
 }
-
 int Servo::getPenDownValue() {
 	return penDOWN;
 }
@@ -59,4 +57,3 @@ void Servo::setPenUpValue(int value) {
 void Servo::setPenDownValue(int value) {
 	penDOWN = value;
 }
-

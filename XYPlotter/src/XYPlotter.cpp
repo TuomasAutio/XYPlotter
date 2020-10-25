@@ -86,15 +86,17 @@ void vConfigureTimerForRunTimeStats(void) {
 }
 /* end runtime statictics collection */
 
-static void stepperTask(void *pvParameters) {
-	char msg[80] = "M10 XY 380 310 0.00 0.00 A0 B0 H0 S80 U160 D90\r\n"; //Default values
-	char OK[6] = "OK\r\n";
-	bool *LimitSwitchStatus;
 
+static void DrawTask(void *pvParameters) {
+  char msg[80] = "M10 XY 380 310 0.00 0.00 A0 B0 H0 S80 U160 D90\r\n"; //Default values
+	char OK[6] = "OK\r\n";
+	
 	StepperController stepper;
 	Servo pen(0, 10);
+  Laser laser(0,12);
 	Command cmd;
-	Laser laser(0,12);
+  bool *LimitSwitchStatus;
+
 	vTaskDelay(1000);
 
 	LimitSwitchStatus = stepper.getLimitSwitchStatus();
@@ -155,7 +157,7 @@ static void stepperTask(void *pvParameters) {
 
 
 
-static void vUartTask(void *pvParameters) {
+static void CommandParseTask(void *pvParameters) {
 	Parser parse;
 	Command cmd;
 
@@ -179,12 +181,12 @@ int main(void) {
 	prvSetupHardware();
 	q_cmd = xQueueCreate(5, sizeof(Command));
 
-	xTaskCreate(stepperTask, "stepperTask",
+	xTaskCreate(DrawTask, "stepperTask",
 			configMINIMAL_STACK_SIZE * 4, NULL, (tskIDLE_PRIORITY + 1UL),
 			(TaskHandle_t *) NULL);
 
-	xTaskCreate(vUartTask, "Uart Task",
-			configMINIMAL_STACK_SIZE * 16, NULL, (tskIDLE_PRIORITY + 1UL),
+	xTaskCreate(CommandParseTask, "Uart Task",
+			configMINIMAL_STACK_SIZE * 5, NULL, (tskIDLE_PRIORITY + 1UL),
 			(TaskHandle_t *) NULL);
 
 	xTaskCreate(cdc_task, "CDC",
