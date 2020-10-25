@@ -14,10 +14,14 @@
 [XYPlotter/src/StepperController.cpp:127]: (warning) Member variable 'StepperController::CordinateX' is not initialized in the constructor.
 [XYPlotter/src/StepperController.cpp:127]: (warning) Member variable 'StepperController::CordinateY' is not initialized in the constructor.
 [XYPlotter/src/StepperController.cpp:127]: (warning) Member variable 'StepperController::stepsPerMM' is not initialized in the constructor.
+[XYPlotter/src/StepperController.cpp:127]: (warning) Member variable 'StepperController::LimitSwitchStatus' is not initialized in the constructor.
 [XYPlotter/src/StepperController.cpp:164]: (error) Memory pointed to by 'limSW1' is freed twice.
 [XYPlotter/src/StepperController.cpp:165]: (error) Memory pointed to by 'limSW1' is freed twice.
 [XYPlotter/src/StepperController.cpp:166]: (error) Memory pointed to by 'limSW1' is freed twice.
-[XYPlotter/src/XYPlotter.cpp:128] -> [XYPlotter/src/XYPlotter.cpp:139]: (style) Local variable cmd shadows outer variable
+[XYPlotter/src/XYPlotter.cpp:103]: (style) Same expression on both sides of '&&'.
+[XYPlotter/src/XYPlotter.cpp:104]: (style) Same expression on both sides of '&&'.
+[XYPlotter/src/XYPlotter.cpp:162] -> [XYPlotter/src/XYPlotter.cpp:170]: (style) Local variable cmd shadows outer variable
+[XYPlotter/src/XYPlotter.cpp:162]: (style) Unused variable: cmd
 [XYPlotter/src/cdc_vcom.c:119]: (style) The scope of the variable 'ep_indx' can be reduced.
 [XYPlotter/src/cdc_vcom.h:95] -> [XYPlotter/src/cdc_vcom.c:179]: (style, inconclusive) Function 'vcom_read_req' argument 2 names different: declaration 'buf_len' definition 'len'.
 [XYPlotter/src/cdc_vcom.h:117] -> [XYPlotter/src/cdc_vcom.c:213]: (style, inconclusive) Function 'vcom_write' argument 2 names different: declaration 'buf_len' definition 'len'.
@@ -31,6 +35,8 @@
 [XYPlotter/src/tools/Laser.cpp:28] -> [XYPlotter/src/tools/Laser.h:16]: (performance, inconclusive) Technically the member function 'Laser::setVal' can be static (but you may consider moving to unnamed namespace).
 [XYPlotter/src/tools/Servo.cpp:7]: (warning) Member variable 'Servo::port' is not initialized in the constructor.
 [XYPlotter/src/tools/Servo.cpp:7]: (warning) Member variable 'Servo::pin' is not initialized in the constructor.
+[XYPlotter/src/tools/Servo.cpp:45] -> [XYPlotter/src/tools/Servo.h:20]: (style, inconclusive) Technically the member function 'Servo::getPenDownValue' can be const.
+[XYPlotter/src/tools/Servo.cpp:49] -> [XYPlotter/src/tools/Servo.h:21]: (style, inconclusive) Technically the member function 'Servo::getPenUpValue' can be const.
 [lpc_board_nxp_lpcxpresso_1549/src/board.c:0]: (information) Too many #ifdef configurations - cppcheck only checks 12 of 15 configurations. Use --force to check all configurations.
 [lpc_board_nxp_lpcxpresso_1549/src/board.c:59]: (information) Skipping configuration 'DEBUG_UART' since the value of 'DEBUG_UART' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
 [lpc_board_nxp_lpcxpresso_1549/src/board.c:69]: (information) Skipping configuration 'DEBUG_UART' since the value of 'DEBUG_UART' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
