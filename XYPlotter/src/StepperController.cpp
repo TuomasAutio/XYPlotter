@@ -249,7 +249,7 @@ void StepperController::calibrate(){
 					}
 				}
 				ySteps = totalStepY / 2; // get average
-				stepsPerMM = ySteps / HEIGHT;
+				stepsPerMM = ySteps / height;
 				CordinateX = xSteps;
 				CordinateY = ySteps;
 				calibrated = true;
@@ -272,6 +272,30 @@ int StepperController::getX() {
 	return CordinateX;
 }
 
-int StepperController::getSPM() {
+int StepperController::getSPMM() {
 	return stepsPerMM;
+}
+
+int StepperController::getWidth() {
+	return width;
+}
+
+int StepperController::getHeight() {
+	return height;
+}
+
+void StepperController::setWidth(int TO_width) {
+	width = TO_width;
+}
+
+void StepperController::setHeight(int TO_height) {
+	height = TO_height;
+}
+
+bool* StepperController::getLimitSwitchStatus() {
+	LimitSwitchStatus[0] = limSW1->read();
+	LimitSwitchStatus[1] = limSW2->read();
+	LimitSwitchStatus[2] = limSW3->read();
+	LimitSwitchStatus[3] = limSW4->read();
+	return LimitSwitchStatus;
 }

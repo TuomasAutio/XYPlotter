@@ -19,9 +19,10 @@ enum CommandType_t {
 	COMMAND_START, //M10
 	COMMAND_MOVE, //G1 go to position
 	COMMAND_PEN, //M1 set pen pos
+	COMMAND_SAVEPEN, //M2
 	COMMAND_LASER, //M4 stop
 	COMMAND_SET_DIR_AND_AREA_SPEED, //M 5
-	COMMAND_READY // ??????
+	COMMAND_LSQUERY // M11
 
 };
 
@@ -29,8 +30,12 @@ struct Command {
 	CommandType_t type = INVALID_COMMAND;
 	float x = 0;
 	float y = 0;
+	int width = 0;
+	int height = 0;
 	bool absolute = NULL;
 	int penvalue = 0;
+	int penUP;
+	int penDOWN;
 	int laservalue = 0;
 };
 
