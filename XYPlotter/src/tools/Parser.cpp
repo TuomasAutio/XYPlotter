@@ -32,8 +32,14 @@ void Parser::getMovetype(const char* line, Command& cmd) {
 		cmd.type = COMMAND_START;
 	else if (strstr(line, "M1 ")!= nullptr)
 		cmd.type = COMMAND_PEN;
+	else if (strstr(line, "M2 ")!= nullptr)
+		cmd.type = COMMAND_SAVEPEN;
 	else if (strstr(line, "M4 ")!= nullptr)
 		cmd.type = COMMAND_LASER;
+	else if (strstr(line, "M5 ")!= nullptr)
+		cmd.type = COMMAND_SET_DIR_AND_AREA_SPEED;
+	else if (strstr(line, "M11\n")!= nullptr)
+		cmd.type = COMMAND_LSQUERY;
 }
 
 /**
@@ -60,6 +66,14 @@ void Parser::getParams(const char* line, Command& cmd) {
 	else if (cmd.type == COMMAND_PEN) {
 		strtok((char*)line, " ");
 		cmd.penvalue = std::stoi(strtok(NULL, " "));							//set pen value
+	}
+	else if (cmd.type == COMMAND_SET_DIR_AND_AREA_SPEED) {
+		cmd.width = std::stoi(findValue('W', line));
+		cmd.height = std::stoi(findValue('H', line));
+	}
+	else if (cmd.type == COMMAND_SAVEPEN) {
+		cmd.penUP = std::stoi(findValue('U', line));
+		cmd.penDOWN = std::stoi(findValue('D', line));
 	}
 }
 

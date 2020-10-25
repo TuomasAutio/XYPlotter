@@ -36,8 +36,12 @@ public:
 	void update_cor(int x, int y);
 	int getX();
 	int getY();
-	int getSPM();
-
+	int getSPMM();
+	int getWidth();
+	int getHeight();
+	void setWidth(int TO_width);
+	void setHeight(int TO_height);
+	bool* getLimitSwitchStatus();
 
 private:
 
@@ -51,6 +55,10 @@ private:
 	int CordinateY;
 	int stepsPerMM;
 
+	int width = 380;
+	int height = 310;
+
+	bool LimitSwitchStatus[4];
 };
 
 

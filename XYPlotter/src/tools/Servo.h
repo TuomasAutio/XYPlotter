@@ -16,11 +16,19 @@ public:
 	Servo(int port, int pin);
 	void Draw();
 	void Stop();
+
+	int getPenDownValue();
+	int getPenUpValue();
+	void setPenDownValue(int value);
+	void setPenUpValue(int value);
 private:
 	int port;
 	int pin;
 
 	int servoPos;
+
+	int penUP = 160;
+	int penDOWN = 90;
 };
 
 

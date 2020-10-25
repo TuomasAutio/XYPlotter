@@ -87,32 +87,64 @@ void vConfigureTimerForRunTimeStats(void) {
 /* end runtime statictics collection */
 
 static void stepperTask(void *pvParameters) {
+	char msg[80] = "M10 XY 380 310 0.00 0.00 A0 B0 H0 S80 U160 D90\r\n"; //Default values
+	char OK[6] = "OK\r\n";
+	bool *LimitSwitchStatus;
+
 	StepperController stepper;
 	Servo pen(0, 10);
 	Command cmd;
 	Laser laser(0,12);
+	vTaskDelay(1000);
 
+	LimitSwitchStatus = stepper.getLimitSwitchStatus();
+	while (*LimitSwitchStatus == false && *(LimitSwitchStatus + 1) == false && 		//Start calibration when all limit switches are open
+           *(LimitSwitchStatus + 1) == false && *(LimitSwitchStatus + 1) == false) {
+		LimitSwitchStatus = stepper.getLimitSwitchStatus();
+		vTaskDelay(100);
+	}
 	stepper.calibrate();
 
 	while (1) {
 		xQueueReceive(q_cmd, &cmd, portMAX_DELAY);
-		if (cmd.type == COMMAND_MOVE) {
-			stepper.move((int) (stepper.getSPM()*cmd.x - stepper.getX()),
-						 (int) (stepper.getSPM()*cmd.y - stepper.getY()));
-		} else if (cmd.type == COMMAND_PEN) {
-			if (cmd.penvalue == 90) {
-				pen.Draw();
-			} else {
-				pen.Stop();
 
+		if (cmd.type == COMMAND_MOVE) {
+			stepper.move((int) (stepper.getSPMM()*cmd.x - stepper.getX()),
+						 (int) (stepper.getSPMM()*cmd.y - stepper.getY()));
+
+		} else if (cmd.type == COMMAND_PEN) {
+			if (cmd.penvalue == pen.getPenDownValue()) {
+				pen.Draw();
+			} else if (cmd.penvalue == pen.getPenUpValue()) {
+				pen.Stop();
 			}
+		} else if (cmd.type == COMMAND_SAVEPEN) {
+			pen.setPenDownValue(cmd.penDOWN);
+			pen.setPenUpValue(cmd.penUP);
 		} else if (cmd.type == COMMAND_LASER) {
 				laser.setVal(cmd.laservalue);
-		} else if (cmd.type == COMMAND_ORIGIN || cmd.type == COMMAND_START) {
+				vTaskDelay(250);
+		} else if (cmd.type == COMMAND_ORIGIN) {
 			stepper.move(((int)0 - stepper.getX()), (int) (0 - stepper.getY()));
-			startLimSwitchCheck();
 
+
+		} else if (cmd.type == COMMAND_SET_DIR_AND_AREA_SPEED) {
+			stepper.setWidth(cmd.width);
+			stepper.setHeight(cmd.height);
+			stepper.calibrate();
+		} else if (cmd.type == COMMAND_LSQUERY) {
+			LimitSwitchStatus = stepper.getLimitSwitchStatus();
+			sprintf(msg, "M11 %d %d %d %d\r\n", *LimitSwitchStatus,*(LimitSwitchStatus+1),
+												*(LimitSwitchStatus+2), *(LimitSwitchStatus+3));
+			USB_send((uint8_t *)msg, strlen(msg));
+		} else if (cmd.type == COMMAND_START) {
+			sprintf(msg, "M10 XY %d %d 0.00 0.00 A0 B0 H0 S80 U%d D%d\r\n",
+					      stepper.getWidth(), stepper.getHeight(),
+						  pen.getPenUpValue(), pen.getPenDownValue());
+			USB_send((uint8_t *)msg, strlen(msg));
+			startLimSwitchCheck();
 		}
+		USB_send((uint8_t *)OK, strlen(OK));
 		vTaskDelay(10);
 	}
 }
@@ -127,25 +159,18 @@ static void vUartTask(void *pvParameters) {
 	Parser parse;
 	Command cmd;
 
-	char msg[80] = "M10 XY 380 310 0.00 0.00 A0 B0 H0 S80 U160 D90\r\nOK\r\n";
-	char OK[6] = "OK\r\n";
-
 	vTaskDelay(100);
 	while (1) {
 		char str[80];
 		uint32_t len = USB_receive((uint8_t *)str, 79);
 
 		str[len] = 0;
-		auto cmd = parse.parse(str);
+		Command cmd = parse.parse(str);
 
-		if (cmd.type != INVALID_COMMAND && cmd.type != COMMAND_START) {
+		if (cmd.type != INVALID_COMMAND) {
 			xQueueSendToBack(q_cmd, &cmd, portMAX_DELAY);
-			USB_send((uint8_t *)OK, 4);
-		} else if (cmd.type == COMMAND_START) {
-			xQueueSendToBack(q_cmd, &cmd, portMAX_DELAY);
-			USB_send((uint8_t *)msg, 48);
 		} else Board_LED_Set(1, true);
-		vTaskDelay(500);
+		vTaskDelay(20);
 	}
 }
 
