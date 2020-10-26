@@ -18,8 +18,6 @@
 [XYPlotter/src/StepperController.cpp:164]: (error) Memory pointed to by 'limSW1' is freed twice.
 [XYPlotter/src/StepperController.cpp:165]: (error) Memory pointed to by 'limSW1' is freed twice.
 [XYPlotter/src/StepperController.cpp:166]: (error) Memory pointed to by 'limSW1' is freed twice.
-[XYPlotter/src/XYPlotter.cpp:103]: (style) Same expression on both sides of '&&'.
-[XYPlotter/src/XYPlotter.cpp:104]: (style) Same expression on both sides of '&&'.
 [XYPlotter/src/XYPlotter.cpp:162] -> [XYPlotter/src/XYPlotter.cpp:170]: (style) Local variable cmd shadows outer variable
 [XYPlotter/src/XYPlotter.cpp:162]: (style) Unused variable: cmd
 [XYPlotter/src/cdc_vcom.c:119]: (style) The scope of the variable 'ep_indx' can be reduced.
