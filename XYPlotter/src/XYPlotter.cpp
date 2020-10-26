@@ -95,13 +95,13 @@ static void DrawTask(void *pvParameters) {
 	Servo pen(0, 10);
   Laser laser(0,12);
 	Command cmd;
-  bool *LimitSwitchStatus;
+  bool LimitSwitchStatus[4];
 
 	vTaskDelay(1000);
 
 	LimitSwitchStatus = stepper.getLimitSwitchStatus();
-	while (*LimitSwitchStatus == false && *(LimitSwitchStatus + 1) == false && 		//Start calibration when all limit switches are open
-           *(LimitSwitchStatus + 1) == false && *(LimitSwitchStatus + 1) == false) {
+	while (LimitSwitchStatus[0] == false && LimitSwitchStatus[1] == false && 		//Start calibration when all limit switches are open
+           LimitSwitchStatus[2] == false && LimitSwitchStatus[3] == false) {
 		LimitSwitchStatus = stepper.getLimitSwitchStatus();
 		vTaskDelay(100);
 	}
