@@ -41,7 +41,7 @@ public:
 	int getHeight();
 	void setWidth(int TO_width);
 	void setHeight(int TO_height);
-	bool* getLimitSwitchStatus();
+	void getLimitSwitchStatus(bool * LimitSwitchStatus);
 
 private:
 

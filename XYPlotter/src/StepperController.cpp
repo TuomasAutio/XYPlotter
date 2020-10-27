@@ -291,11 +291,13 @@ void StepperController::setWidth(int TO_width) {
 void StepperController::setHeight(int TO_height) {
 	height = TO_height;
 }
-
-bool* StepperController::getLimitSwitchStatus() {
+/*
+ * @param LimitSwtichStatus: pointer to bool array [4]
+ * modifies the taken bool array
+ */
+void StepperController::getLimitSwitchStatus(bool * LimitSwitchStatus) {
 	LimitSwitchStatus[0] = limSW1->read();
 	LimitSwitchStatus[1] = limSW2->read();
 	LimitSwitchStatus[2] = limSW3->read();
 	LimitSwitchStatus[3] = limSW4->read();
-	return LimitSwitchStatus;
 }

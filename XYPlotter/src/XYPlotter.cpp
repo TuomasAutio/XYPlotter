@@ -88,21 +88,21 @@ void vConfigureTimerForRunTimeStats(void) {
 
 
 static void DrawTask(void *pvParameters) {
-  char msg[80] = "M10 XY 380 310 0.00 0.00 A0 B0 H0 S80 U160 D90\r\n"; //Default values
+	char msg[80] = "M10 XY 380 310 0.00 0.00 A0 B0 H0 S80 U160 D90\r\n"; //Default values
 	char OK[6] = "OK\r\n";
-	
+
 	StepperController stepper;
 	Servo pen(0, 10);
-  Laser laser(0,12);
+	Laser laser(0,12);
 	Command cmd;
-  bool LimitSwitchStatus[4];
+	bool LimitSwitchStatus[4];
 
 	vTaskDelay(1000);
 
-	LimitSwitchStatus = stepper.getLimitSwitchStatus();
+	stepper.getLimitSwitchStatus(LimitSwitchStatus);
 	while (LimitSwitchStatus[0] == false && LimitSwitchStatus[1] == false && 		//Start calibration when all limit switches are open
-           LimitSwitchStatus[2] == false && LimitSwitchStatus[3] == false) {
-		LimitSwitchStatus = stepper.getLimitSwitchStatus();
+			LimitSwitchStatus[2] == false && LimitSwitchStatus[3] == false) {
+		stepper.getLimitSwitchStatus(LimitSwitchStatus);
 		vTaskDelay(100);
 	}
 	stepper.calibrate();
@@ -112,7 +112,7 @@ static void DrawTask(void *pvParameters) {
 
 		if (cmd.type == COMMAND_MOVE) {
 			stepper.move((int) (stepper.getSPMM()*cmd.x - stepper.getX()),
-						 (int) (stepper.getSPMM()*cmd.y - stepper.getY()));
+					(int) (stepper.getSPMM()*cmd.y - stepper.getY()));
 
 		} else if (cmd.type == COMMAND_PEN) {
 			if (cmd.penvalue == pen.getPenDownValue()) {
@@ -124,8 +124,8 @@ static void DrawTask(void *pvParameters) {
 			pen.setPenDownValue(cmd.penDOWN);
 			pen.setPenUpValue(cmd.penUP);
 		} else if (cmd.type == COMMAND_LASER) {
-				laser.setVal(cmd.laservalue);
-				vTaskDelay(250);
+			laser.setVal(cmd.laservalue);
+			vTaskDelay(250);
 		} else if (cmd.type == COMMAND_ORIGIN) {
 			stepper.move(((int)0 - stepper.getX()), (int) (0 - stepper.getY()));
 
@@ -135,14 +135,14 @@ static void DrawTask(void *pvParameters) {
 			stepper.setHeight(cmd.height);
 			stepper.calibrate();
 		} else if (cmd.type == COMMAND_LSQUERY) {
-			LimitSwitchStatus = stepper.getLimitSwitchStatus();
+			stepper.getLimitSwitchStatus(LimitSwitchStatus);
 			sprintf(msg, "M11 %d %d %d %d\r\n", *LimitSwitchStatus,*(LimitSwitchStatus+1),
-												*(LimitSwitchStatus+2), *(LimitSwitchStatus+3));
+					*(LimitSwitchStatus+2), *(LimitSwitchStatus+3));
 			USB_send((uint8_t *)msg, strlen(msg));
 		} else if (cmd.type == COMMAND_START) {
 			sprintf(msg, "M10 XY %d %d 0.00 0.00 A0 B0 H0 S80 U%d D%d\r\n",
-					      stepper.getWidth(), stepper.getHeight(),
-						  pen.getPenUpValue(), pen.getPenDownValue());
+					stepper.getWidth(), stepper.getHeight(),
+					pen.getPenUpValue(), pen.getPenDownValue());
 			USB_send((uint8_t *)msg, strlen(msg));
 			startLimSwitchCheck();
 		}
